@@ -1,7 +1,5 @@
-import User from "./User.route";
-import Transaction from "./Transaction.route";
+import UserAuth from './Auth/User/User.route';
 
 export default {
-    User,
-    Transaction
-};
+    UserAuth
+}
