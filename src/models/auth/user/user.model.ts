@@ -89,7 +89,6 @@
 import mongoose, { Schema, Document, Error } from "mongoose";
 import bcrypt from "bcrypt";
 
-
 export type UserDocument = Document & {
     firstname: string;
     lastname: string;

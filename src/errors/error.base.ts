@@ -12,7 +12,6 @@ export class AppError extends Error {
         this.error = error;
         Error.captureStackTrace(this, this.constructor);
 
-
         // This any error instantiated with this call is thrown by user itself.
         this.isOperational = true;
     }

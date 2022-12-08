@@ -3,27 +3,20 @@
 import { NextFunction, Request, Response } from "express";
 import { body, check, validationResult } from "express-validator";
 import { User, UserDocument } from "../../../models/auth/user/user.model";
-import { apiOk, apiValidation } from "../../../util/apiHelpers";
+import { apiOk, apiValidation, catchAsync } from "../../../util/apiHelpers";
 import { emailSignupService } from "../../../services/auth/user";
 import { AppError } from "../../../errors/error.base";
 import { HttpStatusCode } from "../../../errors/types/HttpStatusCode";
-// import {createApiResponse} from '../../../util/apiHelpers';
 
-export const emailSignup = async (req: Request, res: Response, next: NextFunction) => {
-    try {
+export const emailSignup = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+    await check("email", "Email is not valid").isEmail().run(req);
+    await check("password", "Password must be at least 8 characters long").isLength({ min: 8 }).run(req);
 
-        await check("email", "Email is not valid").isEmail().run(req);
-        await check("password", "Password must be at least 8 characters long").isLength({ min: 8 }).run(req);
-
-        apiValidation(req, res);
-        const result = await emailSignupService(req, res, next);
-        console.log("result :: ", result);
-        apiOk(res, result);
-    } catch (error) {
-        console.log("coming up inside catch block! ==== ", error)
-        next(error);
-    }
-};
+    apiValidation(req, res);
+    const result = await emailSignupService(req, res, next);
+    console.log("result :: ", result);
+    apiOk(res, result);
+});
 
 // import async from "async";
 // import crypto from "crypto";
