@@ -1,5 +1,5 @@
-import UserAuth from './Auth/User/User.route';
+import UserAuth from "./auth/user/user.route";
 
 export default {
     UserAuth
-}
+};

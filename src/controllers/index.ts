@@ -1,1 +1,1 @@
-export * as UserAuthController from "./Auth/User/User.controller";
+export * as UserAuthController from "./auth/user/user.controller";

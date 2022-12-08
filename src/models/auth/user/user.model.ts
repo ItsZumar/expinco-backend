@@ -86,11 +86,11 @@
 
 // export const User = mongoose.model<UserDocument>("User", userSchema);
 
-import mongoose from 'mongoose';
-import bcrypt from 'bcrypt';
+import mongoose, { Schema, Document, Error } from "mongoose";
+import bcrypt from "bcrypt";
 
 
-export type UserDocument = mongoose.Document & {
+export type UserDocument = Document & {
     firstname: string;
     lastname: string;
     email: string;
@@ -101,13 +101,12 @@ export type UserDocument = mongoose.Document & {
 
 type comparePasswordFunction = (candidatePassword: string, cb: (err: any, isMatch: any) => void) => void;
 
-const userSchema = new mongoose.Schema<UserDocument>(
+const userSchema = new Schema<UserDocument>(
     {
         firstname: String,
         lastname: String,
-        email: { type: String, unique: true },
-        password: String,
-
+        email: { type: String, unique: true, required: true },
+        password: String
     },
     { timestamps: true },
 );
@@ -122,7 +121,7 @@ userSchema.pre("save", function save(next) {
 
     bcrypt.genSalt(10, (err, salt) => {
         if (err) { return next(err); }
-        bcrypt.hash(user.password, salt, (err: mongoose.Error, hash) => {
+        bcrypt.hash(user.password, salt, (err: Error, hash) => {
             if (err) { return next(err); }
             user.password = hash;
             next();
@@ -131,7 +130,7 @@ userSchema.pre("save", function save(next) {
 });
 
 const comparePassword: comparePasswordFunction = function (candidatePassword, cb) {
-    bcrypt.compare(candidatePassword, this.password, (err: mongoose.Error, isMatch: boolean) => {
+    bcrypt.compare(candidatePassword, this.password, (err: Error, isMatch: boolean) => {
         cb(err, isMatch);
     });
 };

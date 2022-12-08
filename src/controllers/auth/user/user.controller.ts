@@ -2,8 +2,12 @@
 
 import { NextFunction, Request, Response } from "express";
 import { body, check, validationResult } from "express-validator";
-import { User, UserDocument } from "../../../models/Auth/User/User.model";
-
+import { User, UserDocument } from "../../../models/auth/user/user.model";
+import { apiOk, apiValidation } from "../../../util/apiHelpers";
+import { emailSignupService } from "../../../services/auth/user";
+import { AppError } from "../../../errors/error.base";
+import { HttpStatusCode } from "../../../errors/types/HttpStatusCode";
+// import {createApiResponse} from '../../../util/apiHelpers';
 
 export const emailSignup = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -11,50 +15,12 @@ export const emailSignup = async (req: Request, res: Response, next: NextFunctio
         await check("email", "Email is not valid").isEmail().run(req);
         await check("password", "Password must be at least 8 characters long").isLength({ min: 8 }).run(req);
 
-        const errors = validationResult(req);
-        // "errorDetails": null,
-        // "errors": [],
-        // "stack": ""
-
-        if (!errors.isEmpty()) {
-            res.json({
-                result: null,
-                errors: errors.array()[0].msg,
-                // stack: 
-            })
-            // res.json({error: errors.array()})
-        }
-
-        // res.json({
-        //     status: "success",
-        //     message: "Your app is live!!!"
-        // });
-
-        const user = new User({
-            firstname: req.body.firstname,
-            lastname: req.body.lastname,
-            email: req.body.email,
-            password: req.body.password,
-        });
-
-        User.findOne({ email: req.body.email }, (err: NativeError, existingUser: UserDocument) => {
-            if (err) { return next(err); }
-            if (existingUser) {
-                req.flash("errors", { error: "Account with this email address already exists." });
-                // return res.redirect("/signup");
-            }
-            user.save((err, result) => {
-                if (err) { return next(err); }
-                res.json({
-                    result: {
-                        data: result
-                    }
-                });
-            });
-        });
-
+        apiValidation(req, res);
+        const result = await emailSignupService(req, res, next);
+        console.log("result :: ", result);
+        apiOk(res, result);
     } catch (error) {
-        console.log("error :: " + error);
+        console.log("coming up inside catch block! ==== ", error)
         next(error);
     }
 };

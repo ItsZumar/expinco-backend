@@ -1,9 +1,7 @@
 import errorHandler from "errorhandler";
 import app from "./app";
 
-if (process.env.NODE_ENV === "development") {
-    app.use(errorHandler());
-}
+app.use(errorHandler());
 
 const PORT = app.get("port");
 const ENV_MODE = app.get("env");
