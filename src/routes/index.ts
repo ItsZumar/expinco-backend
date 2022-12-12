@@ -1,4 +1,4 @@
-import UserAuth from "./auth/user/user.route";
+import UserAuth from "./user/user.route";
 
 export default {
     UserAuth

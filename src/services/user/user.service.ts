@@ -2,7 +2,7 @@ import { User, UserDocument } from "../../models/user/user.model";
 import { NextFunction, Request, Response } from "express";
 import { AppError } from "../../errors/error.base";
 import { HttpStatusCode } from "../../errors/types/HttpStatusCode";
-import { createServiceResponse, validateAPI } from "../../util/apiHelpers";
+import { createServiceResponse } from "../../util/apiHelpers";
 import { UserResponse } from "./responses/UserResponse";
 
 export const emailSignupService = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
