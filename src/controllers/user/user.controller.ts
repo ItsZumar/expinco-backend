@@ -1,22 +1,47 @@
 
 
 import { NextFunction, Request, Response } from "express";
-import { body, check, validationResult } from "express-validator";
-import { User, UserDocument } from "../../../models/auth/user/user.model";
-import { apiOk, apiValidation, catchAsync } from "../../../util/apiHelpers";
-import { emailSignupService } from "../../../services/auth/user";
-import { AppError } from "../../../errors/error.base";
-import { HttpStatusCode } from "../../../errors/types/HttpStatusCode";
+import { check } from "express-validator";
+import { apiOk, apiValidation, catchAsync } from "../../util/apiHelpers";
+import { emailSignupService } from "../../services/user";
 
 export const emailSignup = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+    await check("firstname", "Firstname is not valid").isString().run(req)
+    await check("lastname", "Lastname is not valid").isString().run(req)
     await check("email", "Email is not valid").isEmail().run(req);
     await check("password", "Password must be at least 8 characters long").isLength({ min: 8 }).run(req);
 
     apiValidation(req, res);
     const result = await emailSignupService(req, res, next);
-    console.log("result :: ", result);
     apiOk(res, result);
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // import async from "async";
 // import crypto from "crypto";

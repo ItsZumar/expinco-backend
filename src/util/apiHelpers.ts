@@ -53,24 +53,14 @@ export const apiValidation = (req: Request, res: Response) => {
 };
 
 export const createServiceResponse = <T>(data: any, dto: T): T => {
-  /* 
-    even if the data doesn't have the feilds required,
-    we can extract them as null for the response from the response Model
-  */
-  const mergedData = { ...dto, ...data };
-
-  console.log("mergedData :: ", mergedData);
-
+  const mergedData = { ...dto, ...data._doc };
   return extractFields(dto, mergedData);
 };
 
-// ================== ABOVE CODE IS WRITTEN BY ME =================================
-
-
 export const apiOk = async <T>(res: Response, result: any, dto?: T) => {
-  const nresult = injectPaginationIfResultIsTruthy(res, result);
-  const fresult = generateApiOkResponse(nresult);
-  res.status(200).json(fresult);
+  const r1 = injectPaginationIfResultIsTruthy(res, result);
+  const r2 = generateApiOkResponse(r1);
+  res.status(200).json(r2);
 };
 
 const injectPaginationIfResultIsTruthy = (res: Response, result: any) => {
@@ -86,8 +76,6 @@ const generateApiOkResponse = (result: any): ApiResponse => {
 };
 
 const injectPagination = (res: Response, result: any) => {
-  console.log("result.pagination :: ", result.pagination);
-
   // if (result.pagination && (result.pagination.next === "" || result.pagination.next)) {
   //   const fullUrl = res.req?.protocol + "://" + res.req?.get("host") + res.req?.originalUrl;
   //   const nextpage = fullUrl + `?page=${result.pagination.page + 1}&perPage=${result.pagination.perPage}`;
@@ -103,6 +91,9 @@ const injectPagination = (res: Response, result: any) => {
   // }
   return result;
 };
+
+// ================== ABOVE CODE IS WRITTEN BY ME =================================
+
 
 export const errorUnhandledRejection = (err: any) => {
   console.error("Unhandle rejection: ", err);
