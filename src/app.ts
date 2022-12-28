@@ -34,12 +34,13 @@ app.use(session({
 app.use(lusca.xframe("SAMEORIGIN"));
 app.use(lusca.xssProtection(true));
 
-// Route Listings
+// Routes Listings
 app.use("/v1/user/auth", routes.UserAuth);
 
 // Handling 404 and  Global errors here
 app.all("*", errorHandler404);
 
+// Handling for any other uncatch errors
 app.use(errorHandlerAll);
 
 process.on("unhandledRejection", errorUnhandledRejection);

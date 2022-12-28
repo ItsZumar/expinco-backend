@@ -38,7 +38,7 @@ export const errorHandlerAll = (err: AppError | Error, req: Request, res: Respon
       stack: "No stack traces found.",
     };
   }
-  res.status(statusCode).json(toSend)
+  res.status(statusCode).json(toSend);
 };
 
 export const errorHandler404 = (req: Request, res: Response, next: NextFunction) => {
@@ -62,12 +62,12 @@ export const createServiceResponse = <T>(data: any, dto: T): T => {
 
 export const apiOk = async <T>(res: Response, result: any) => {
   const r1 = injectPaginationIfResultIsTruthy(res, result);
-  const r2 = generateApiOkResponse(r1);
-  res.status(200).json(r2);
+  const r2 = generateApiOkResponse(result);
+  return res.status(200).json(r2);
 };
 
 const injectPaginationIfResultIsTruthy = (res: Response, result: any) => {
-  return result ? injectPagination(res, result) : result;
+  return result && result.length ? injectPagination(res, result) : result;
 };
 
 const generateApiOkResponse = (result: any): ApiResponse => {

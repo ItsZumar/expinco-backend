@@ -1,11 +1,9 @@
-import express from "express";
-import { UserAuthController } from "../../controllers";
+import express, { Router } from "express";
+import { UserController } from "../../controllers";
 
 const router = express.Router();
 
-router.post("/email-signup", UserAuthController.emailSignup);
-
-// router.get("/", (req, res) => console.log("req :: ", req);
-// router.patch("/", (req, res) => console.log("req :: ", req));
+router.post("/email-signup", UserController.emailSignup);
+router.post("/email-signin", UserController.emailSignin);
 
 export default router;
