@@ -3,7 +3,7 @@ import { NextFunction, Request, Response } from "express";
 import { AppError } from "../../errors/error.base";
 import { HttpStatusCode } from "../../errors/types/HttpStatusCode";
 import { createServiceResponse } from "../../util/apiHelpers";
-import { UserResponse } from "./responses/UserResponse";
+import { UserResponse } from "./user.responses";
 
 export const emailSignupService = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
     const newUser = new User({
@@ -16,7 +16,7 @@ export const emailSignupService = async (req: Request, res: Response, next: Next
     const users: UserDocument[] = await User.find({ email: req.body.email });
     if (users.length) {
         // Check if we got any data stored in db
-        throw new AppError(HttpStatusCode.Conflict, "User already exists with this email!");
+        next(new AppError(HttpStatusCode.Conflict, "User already exists with this email!"))
     }
     const result: UserDocument = await newUser.save();
     return createServiceResponse(result, new UserResponse());

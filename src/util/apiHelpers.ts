@@ -1,14 +1,11 @@
 import { NextFunction, Response, Request } from "express";
-import { ENVIRONMENT } from "./secrets";
-import logger from "./logger";
-import _ from "lodash";
 import { validationResult } from "express-validator";
-import { IPaginateResult } from "../services/pagination";
-import { flattenObj, isPlainObj } from "./common";
-import { check, sanitize, oneOf } from "express-validator";
+import { flattenObj } from "./common";
+import { check } from "express-validator";
 import { extractFields } from "./common";
 import { AppError } from "../errors/error.base";
 import { HttpStatusCode } from "../errors/types/HttpStatusCode";
+import logger from "./logger";
 
 export interface ApiResponse {
   result: any;
@@ -34,13 +31,19 @@ export const errorHandlerAll = (err: AppError | Error, req: Request, res: Respon
       error: err.message,
       stack: err.stack,
     };
+  } else {
+    toSend = {
+      result: null,
+      error: "Something went wrong.",
+      stack: "No stack traces found.",
+    };
   }
-  res.status(statusCode).json(toSend);
+  res.status(statusCode).json(toSend)
 };
 
 export const errorHandler404 = (req: Request, res: Response, next: NextFunction) => {
-  const error: string = `Can't find ${req.url} on this server!`;
-  next(new AppError(HttpStatusCode.NotFound, error));
+  const error = `Can't find ${req.originalUrl} on this server!`;
+  throw new AppError(HttpStatusCode.NotFound, error);
 };
 
 export const apiValidation = (req: Request, res: Response) => {
@@ -57,7 +60,7 @@ export const createServiceResponse = <T>(data: any, dto: T): T => {
   return extractFields(dto, mergedData);
 };
 
-export const apiOk = async <T>(res: Response, result: any, dto?: T) => {
+export const apiOk = async <T>(res: Response, result: any) => {
   const r1 = injectPaginationIfResultIsTruthy(res, result);
   const r2 = generateApiOkResponse(r1);
   res.status(200).json(r2);
@@ -100,8 +103,8 @@ export const errorUnhandledRejection = (err: any) => {
 };
 
 export const errorUncughtException = (err: any) => {
-  // logger.error("UNCAUGHT EXCEPTION! Shutting down...");
-  // logger.error("Uncaught EXCEPTION: ", err);
+  logger.error("UNCAUGHT EXCEPTION! Shutting down...");
+  logger.error("Uncaught EXCEPTION: ", err);
   process.exit(1);
 };
 

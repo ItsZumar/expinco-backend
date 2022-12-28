@@ -67,7 +67,6 @@ export const inject = (str: string, obj: any) => str.replace(/\${(.*?)}/g, (x, g
 export const genRandomHex = (size: number) => [...Array(size)].map(() => Math.floor(Math.random() * 16).toString(16)).join("");
 
 export const extractFields = <T>(o: T, data: any): T => {
-
     if (!data) {
         return o;
     }
@@ -76,10 +75,8 @@ export const extractFields = <T>(o: T, data: any): T => {
         if (data[k] === null && data[k] === undefined) {
             continue;
         }
-
         const val = data[k];
         const myval = obj[k];
-
         if (isPlainObj(myval)) {
             const res = extractFields(myval, val);
             obj[k] = res;
@@ -166,7 +163,7 @@ export const genRandomFourDigitCode = (): string => {
 };
 
 export const genRandomDigitCode = (n: number): string => {
-    const add: number = 1;
+    const add = 1;
     let max: number = 12 - add;   // 12 is the min safe number Math.random() can generate without it starting to pad the end with zeros.   
 
     if (n > max) {
@@ -190,20 +187,15 @@ export const generateHash = (targetLength: number): string => {
     return text;
 };
 
-
-
 export function stringToEnum<T>(name: string, e: T): T[keyof T] {
     const values = Object.values(e).map(item => String(item));
     const keys = Object.keys(e);
-
     if (!keys.includes(name)) {
         throw new Error(`Name '${name}' not found in enum keys, possible values: ${keys}`);
     }
-
     const p = e[name as keyof typeof e];
     return p;
 }
-
 
 /**
  * It will extract specific keys from object. If no specific found it will return null value for that key
@@ -211,19 +203,14 @@ export function stringToEnum<T>(name: string, e: T): T[keyof T] {
  * @param keyArray Array of keys that need to be extracted
  * @returns New object which contain values. If no specific found it will return null value for that key
  */
-export const extractDataFromObject =
-    (dataObject: Record<string, any>, keyArray: string[]): Record<string, any> => {
-        const newData: Record<string, any> = {};
-        keyArray.map((key: string) => (newData[key] = dataObject[key] ? dataObject[key] : null));
-        return newData;
-    };
-
-
+export const extractDataFromObject = (dataObject: Record<string, any>, keyArray: string[]): Record<string, any> => {
+    const newData: Record<string, any> = {};
+    keyArray.map((key: string) => (newData[key] = dataObject[key] ? dataObject[key] : null));
+    return newData;
+};
 
 export const generateOTP = () => {
-
-    // Declare a string variable 
-    // which stores all string
+    // Declare a string variable which stores all string
     const string = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
     let OTP = "";
 
@@ -235,13 +222,10 @@ export const generateOTP = () => {
     return OTP;
 };
 
-
-
 export const emailValidation = (email: string) => {
     const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(String(email).toLowerCase());
 };
-
 
 export function getEnumKeyByEnumValue<T extends { [index: string]: string }>(enumValue: string, myEnum: T): keyof T | null {
     const keys = Object.keys(myEnum).filter(x => myEnum[x] == enumValue);
