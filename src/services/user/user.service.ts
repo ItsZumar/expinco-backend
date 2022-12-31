@@ -3,7 +3,7 @@ import { NextFunction, Request, Response } from "express";
 import { AppError } from "../../errors/error.base";
 import { HttpStatusCode } from "../../errors/types/HttpStatusCode";
 import { createServiceResponse } from "../../util/apiHelpers";
-import { UserSignUpResponse, UserSignInResponse } from "./user.responses";
+import { UserSignUpResponse, UserSignInResponse } from './user.responses';
 
 export const emailSignupService = async (req: Request, res: Response, next: NextFunction): Promise<UserDocument> => {
     const newUser = new User({
@@ -21,29 +21,19 @@ export const emailSignupService = async (req: Request, res: Response, next: Next
     // return createServiceResponse(result, new UserSignUpResponse());
 };
 
-export const emailSigninService = async (req: Request, res: Response, next: NextFunction): Promise<any> => {    
+export const emailSigninService = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
     const user = await User.findOne({ email: req.body.email })
     if (!user) {
-        throw new AppError(HttpStatusCode.Conflict, "User doesn't exists with this email!");
+        throw new AppError(HttpStatusCode.BadRequest, "Either email or password is invalid");
     } else {
-        return user.comparePassword(req.body.password, (err, isMatch) => {
-            console.log("isMatch ==== ", isMatch);
-            console.log("err ==== ", err);
-
-            if (err) {
-                console.log("here...");
-                throw new AppError(HttpStatusCode.BadRequest, err.message);
-            }
-            else if (isMatch) {
-                let mUser = { ...user }
-                delete mUser.password
-                return mUser;
-            } else {
-                throw new AppError(HttpStatusCode.Unauthorized, "Entered password is invalid");
-            } 
-        })
+        let { isMatch } = await user.comparePassword(req.body.password);
+        if (isMatch) {
+            let _User = { ...user.toJSON() };
+            delete _User.password;
+            return _User;
+        } else {
+            throw new AppError(HttpStatusCode.BadRequest, "Either email or password is invalid");
+        }
     }
 
-    // return createServiceResponse(users, users);
-    // return createServiceResponse(users, new UserSignInResponse());
 };

@@ -1,16 +1,13 @@
 import mongoose, { Schema, Document, Error } from "mongoose";
 import bcrypt from "bcrypt";
-import { AppError } from "../../errors/error.base";
-import { HttpStatusCode } from "../../errors/types/HttpStatusCode";
 
-type comparePasswordFunction = (password: string, cb: (err: any, isMatch: any) => any) => any;
+type comparePasswordFunction = (password: string) => { isMatch: boolean };
 
 export type UserDocument = Document & {
   firstname: string;
   lastname: string;
   email: string;
   password: string;
-
   comparePassword: comparePasswordFunction;
 };
 
@@ -47,10 +44,9 @@ userSchema.pre("save", function save(next) {
   });
 });
 
-const comparePassword: comparePasswordFunction = function (password, cb) {
-  bcrypt.compare(password, this.password, (err: mongoose.Error, isMatch: boolean) => {
-      cb(err, isMatch);
-  });
+const comparePassword = async function (password: string) {
+  let isMatch = await bcrypt.compare(password, this.password)
+  return { isMatch }
 };
 
 userSchema.methods.comparePassword = comparePassword;
