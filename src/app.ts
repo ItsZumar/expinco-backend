@@ -36,6 +36,11 @@ app.use(lusca.xssProtection(true));
 
 // Routes Listings
 app.use("/v1/user/auth", routes.UserAuth);
+app.use("/app", (req, res) => {
+    res.json({
+        status: "LIVE"
+    })
+});
 
 // Handling 404 and  Global errors here
 app.all("*", errorHandler404);

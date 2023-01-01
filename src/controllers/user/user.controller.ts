@@ -5,6 +5,9 @@ import { emailSignupService, emailSigninService } from "../../services/user";
 
 export const emailSignup = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     await check("firstname", "Firstname is not valid").isString().run(req);
+    await check("firstname", "Firstname must be greator than 5 characters").isLength({min: 5}).run(req);
+
+
     await check("lastname", "Lastname is not valid").isString().run(req);
     await check("email", "Email is not valid").isEmail().run(req);
     await check("password", "Password must be at least 8 characters long").isLength({ min: 8 }).run(req);
