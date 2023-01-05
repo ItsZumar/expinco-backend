@@ -8,6 +8,10 @@ export type UserDocument = Document & {
   lastname: string;
   email: string;
   password: string;
+  
+  isEmailVerified: boolean;
+  authCode: string;
+
   comparePassword: comparePasswordFunction;
 };
 
@@ -17,6 +21,14 @@ const userSchema = new Schema<UserDocument>(
     lastname: String,
     email: { type: String, unique: true, required: true },
     password: String,
+    isEmailVerified: {
+      type: Boolean,
+      default: false,
+    },
+    authCode: {
+      type: String,
+      default: null,
+    },
   },
   { timestamps: true, versionKey: false }
 );
@@ -45,8 +57,8 @@ userSchema.pre("save", function save(next) {
 });
 
 const comparePassword = async function (password: string) {
-  let isMatch = await bcrypt.compare(password, this.password)
-  return { isMatch }
+  let isMatch = await bcrypt.compare(password, this.password);
+  return { isMatch };
 };
 
 userSchema.methods.comparePassword = comparePassword;
