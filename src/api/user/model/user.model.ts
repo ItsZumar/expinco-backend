@@ -8,7 +8,7 @@ export type UserDocument = Document & {
   lastname: string;
   email: string;
   password: string;
-  
+
   isEmailVerified: boolean;
   authCode: string;
 
@@ -36,24 +36,13 @@ const userSchema = new Schema<UserDocument>(
 /**
  * Password hash middleware.
  */
-userSchema.pre("save", function save(next) {
+userSchema.pre("save", async function(next) {
   const user = this as UserDocument;
 
-  if (!user.isModified("password")) {
-    return next();
+  if (user.isModified("password")) {
+    user.password = await bcrypt.hash(user.password, 5)
   }
-  bcrypt.genSalt(10, (err, salt) => {
-    if (err) {
-      return next(err);
-    }
-    bcrypt.hash(user.password, salt, (err: Error, hash) => {
-      if (err) {
-        return next(err);
-      }
-      user.password = hash;
-      next();
-    });
-  });
+  next();
 });
 
 const comparePassword = async function (password: string) {

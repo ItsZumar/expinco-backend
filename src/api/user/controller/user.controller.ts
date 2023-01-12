@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { check } from "express-validator";
-import { apiOk, apiValidation, catchAsync } from "../../util/apiHelpers";
-import { emailSignupService, emailSigninService, forgotPasswordService, verifyEmailService } from "../../services/user";
+import { apiOk, apiValidation, catchAsync } from "../../../util/apiHelpers";
+import { emailSignupService, emailSigninService, forgotPasswordService, verifyEmailService } from "../service/user.service";
 
 export const emailSignup = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     await check("firstname", "Firstname is not valid").isString().run(req);

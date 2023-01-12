@@ -11,7 +11,7 @@ import lusca from "lusca";
 import MongoStore from "connect-mongo";
 import morgan from "morgan";
 import mongoInit from "./config/database";
-import routes from "./routes";
+import routes from "./api/gRoutes";
 
 const app = express();
 mongoInit(MONGODB_URI);
@@ -35,7 +35,7 @@ app.use(lusca.xframe("SAMEORIGIN"));
 app.use(lusca.xssProtection(true));
 
 // Routes Listings
-app.use("/v1/user/auth", routes.UserAuth);
+app.use("/v1/user/auth", routes.user);
 app.use("/app", (req, res) => {
     res.json({
         status: "LIVE"
