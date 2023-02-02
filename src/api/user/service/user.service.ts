@@ -21,21 +21,21 @@ export const emailSignupService = async (req: Request, res: Response, next: Next
 
     const user = await newUser.save();
     const token = await signJWT(user._id)
-    
+
     // Getting authCode by generating random digits
     let authCode = await generateRandomDigits(6)
 
     // Saving user object with authCode to match later during email verification process
     user.authCode = authCode + ""
     await user.save()
-    
+
     // Now, sending an email notification for email verification
     await sendEmailNotification({
         to: user.email,
         subject: "VERIFY YOUR EMAIL",
         textMessage: `Your auth code is ${authCode}.`
     })
-    
+
     // Making these undefined will hide these from getting into response 
     user.password = undefined;
     user.authCode = undefined;
@@ -70,12 +70,49 @@ export const forgotPasswordService = async (req: Request, res: Response, next: N
         throw new AppError(HttpStatusCode.BadRequest, "User doesn't exists with this email");
     } else {
 
-        // Generate OTP Code
-        let otpCode = "123456"
+        // Getting authCode by generating random digits
+        let authCode = await generateRandomDigits(6)
 
-        // Saving the OTP Code for checking later
-        user.authCode = otpCode;
+        // Saving user object with authCode to match later during email verification process
+        user.authCode = authCode + ""
+        user.isEmailVerified = false;
         await user.save()
+
+        // Now, sending an email notification for email verification
+        await sendEmailNotification({
+            to: user.email,
+            subject: "Expinco Email Verification",
+            textMessage: `Your auth code is ${authCode}.`
+        })
+
+        // Send OTP Code to user email
+        return {
+            message: "Check your email for OTP Code."
+        }
+    }
+};
+
+export const changePasswordService = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+    const user = await User.findOne({ email: req.body.email })
+
+    if (!user) {
+        throw new AppError(HttpStatusCode.BadRequest, "User doesn't exists with this email");
+    } else {
+
+        // Getting authCode by generating random digits
+        let authCode = await generateRandomDigits(6)
+
+        // Saving user object with authCode to match later during email verification process
+        user.authCode = authCode + ""
+        user.isEmailVerified = false;
+        await user.save()
+
+        // Now, sending an email notification for email verification
+        await sendEmailNotification({
+            to: user.email,
+            subject: "Expinco Email Verification",
+            textMessage: `Your auth code is ${authCode}.`
+        })
 
         // Send OTP Code to user email
         return {
@@ -91,6 +128,11 @@ export const verifyEmailService = async (req: Request, res: Response, next: Next
     if (!user) {
         throw new AppError(HttpStatusCode.BadRequest, "User doesn't exists with this email");
     } else {
+
+        if (user.isEmailVerified) {
+            throw new AppError(HttpStatusCode.Conflict, "This email is already verified!");
+        }
+
         if (user.authCode === authCode) {
             user.isEmailVerified = true
             user.authCode = undefined
@@ -99,7 +141,39 @@ export const verifyEmailService = async (req: Request, res: Response, next: Next
             throw new AppError(HttpStatusCode.BadRequest, "AuthCode is invalid");
         }
         return {
-            message: "Your email has been verified!"
+            message: "Your email has been verified! Please login in!"
+        }
+    }
+};
+
+export const resendVerifyEmailService = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+    const { email } = req.body
+    const user = await User.findOne({ email })
+
+    if (!user) {
+        throw new AppError(HttpStatusCode.BadRequest, "User doesn't exists with this email");
+    } else {
+
+        if (user.isEmailVerified) {
+            throw new AppError(HttpStatusCode.Conflict, "This email is already verified!");
+        }
+
+        // Getting authCode by generating random digits
+        let authCode = await generateRandomDigits(6)
+
+        // Saving user object with authCode to match later during email verification process
+        user.authCode = authCode + ""
+        await user.save()
+
+        // Now, sending an email notification for email verification
+        await sendEmailNotification({
+            to: user.email,
+            subject: "EXPINCO Email Verification",
+            textMessage: `Your auth code is ${authCode}.`
+        })
+
+        return {
+            message: "Auth code has been send. Check your email!"
         }
     }
 };

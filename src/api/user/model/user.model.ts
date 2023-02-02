@@ -1,25 +1,24 @@
-import mongoose, { Schema, Document, Error } from "mongoose";
+import mongoose, { Schema, Document } from "mongoose";
 import bcrypt from "bcrypt";
 
-type comparePasswordFunction = (password: string) => { isMatch: boolean };
+const BCRYPT_SALT = process.env.BCRYPT_SALT
 
 export type UserDocument = Document & {
   firstname: string;
   lastname: string;
   email: string;
   password: string;
-
   isEmailVerified: boolean;
   authCode: string;
 
-  comparePassword: comparePasswordFunction;
+  comparePassword: (password: string) => { isMatch: boolean };
 };
 
 const userSchema = new Schema<UserDocument>(
   {
     firstname: String,
     lastname: String,
-    email: { type: String, unique: true, required: true },
+    email: { type: String, unique: true, required: true, lowercase: true},
     password: String,
     isEmailVerified: {
       type: Boolean,
@@ -34,22 +33,20 @@ const userSchema = new Schema<UserDocument>(
 );
 
 /**
- * Password hash middleware.
+ * Password hashing middleware.
  */
-userSchema.pre("save", async function(next) {
+userSchema.pre("save", async function (next) {
   const user = this as UserDocument;
 
   if (user.isModified("password")) {
-    user.password = await bcrypt.hash(user.password, 5)
+    user.password = await bcrypt.hash(user.password, 10)
   }
   next();
 });
 
-const comparePassword = async function (password: string) {
+userSchema.methods.comparePassword = async function (password: string) {
   let isMatch = await bcrypt.compare(password, this.password);
   return { isMatch };
 };
-
-userSchema.methods.comparePassword = comparePassword;
 
 export const User = mongoose.model<UserDocument>("User", userSchema, "user");

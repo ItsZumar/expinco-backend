@@ -38,7 +38,7 @@ app.use(lusca.xssProtection(true));
 app.use("/v1/user/auth", routes.user);
 app.use("/app", (req, res) => {
     res.json({
-        status: "LIVE"
+        status: "LIVE FROM EXPINCO"
     })
 });
 

@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { check } from "express-validator";
 import { apiOk, apiValidation, catchAsync } from "../../../util/apiHelpers";
-import { emailSignupService, emailSigninService, forgotPasswordService, verifyEmailService } from "../service/user.service";
+import { emailSignupService, emailSigninService, forgotPasswordService, verifyEmailService, resendVerifyEmailService, changePasswordService } from "../service/user.service";
 
 export const emailSignup = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     await check("firstname", "Firstname is not valid").isString().run(req);
@@ -22,14 +22,6 @@ export const emailSignin = catchAsync(async (req: Request, res: Response, next: 
     apiOk(res, result);
 });
 
-export const forgotPassword = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-    await check("email", "Email is not valid").isEmail().run(req);
-
-    apiValidation(req, res);
-    const result = await forgotPasswordService(req, res, next);
-    apiOk(res, result);
-});
-
 export const verifyEmail = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     await check("email", "Email is not valid").isEmail().run(req);
 
@@ -39,19 +31,27 @@ export const verifyEmail = catchAsync(async (req: Request, res: Response, next: 
 });
 
 export const resendVerifyEmail = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-    // await check("email", "Email is not valid").isEmail().run(req);
+    await check("email", "Email is not valid").isEmail().run(req);
 
-    // apiValidation(req, res);
-    // const result = await emailSigninService(req, res, next);
-    // apiOk(res, result);
+    apiValidation(req, res);
+    const result = await resendVerifyEmailService(req, res, next);
+    apiOk(res, result);
+});
+
+export const forgotPassword = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+    await check("email", "Email is not valid").isEmail().run(req);
+
+    apiValidation(req, res);
+    const result = await forgotPasswordService(req, res, next);
+    apiOk(res, result);
 });
 
 export const changePassword = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-    // await check("email", "Email is not valid").isEmail().run(req);
+    await check("email", "Email is not valid").isEmail().run(req);
 
-    // apiValidation(req, res);
-    // const result = await emailSigninService(req, res, next);
-    // apiOk(res, result);
+    apiValidation(req, res);
+    const result = await changePasswordService(req, res, next);
+    apiOk(res, result);
 });
 
 export const resetPassword = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
