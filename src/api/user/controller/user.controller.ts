@@ -39,7 +39,7 @@ export const resendVerifyEmail = catchAsync(async (req: Request, res: Response, 
 });
 
 export const forgotPassword = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-    await check("email", "Email is not valid").isEmail().run(req);
+    await check("email", "Please enter your valid email").isEmail().run(req);
 
     apiValidation(req, res);
     const result = await forgotPasswordService(req, res, next);
@@ -48,7 +48,7 @@ export const forgotPassword = catchAsync(async (req: Request, res: Response, nex
 
 export const changePassword = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     await check("oldPassword", "Please enter your old password.").isString().run(req)
-    await check("newPassword", "Please enter your new password").isString().run(req);
+    await check("newPassword", "Please enter a new password").isString().run(req);
 
     apiValidation(req, res);
     const result = await changePasswordService(req, res, next);
@@ -57,6 +57,8 @@ export const changePassword = catchAsync(async (req: Request, res: Response, nex
 
 export const resetPassword = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     await check("email", "Email is not valid").isEmail().run(req);
+    await check("authCode", "Auth code is missing").isString().run(req);
+    await check("newPassword", "New password is missing").isString().run(req);
 
     apiValidation(req, res);
     const result = await resetPasswordService(req, res, next);

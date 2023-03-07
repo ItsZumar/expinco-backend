@@ -75,7 +75,7 @@ export const forgotPasswordService = async (req: Request, res: Response, next: N
         let authCode = await generateRandomDigits(6)
 
         // Saving user object with authCode to match later during email verification process
-        user.authCode = authCode + ""
+        user.authCode = String(authCode);
         user.isEmailVerified = false;
         await user.save()
 
@@ -87,36 +87,25 @@ export const forgotPasswordService = async (req: Request, res: Response, next: N
         })
 
         // Send OTP Code to user email
-        return {
-            message: "Check your email for OTP Code."
-        }
+        return { message: "Check your email for OTP Code." }
     }
 };
 
 export const changePasswordService = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
-
-    console.log("req.user.email ", req.user.email)
-
     const user = await User.findOne({ email: req.user.email })
-
-    console.log("user === ", user)
 
     if (!user) {
         throw new AppError(HttpStatusCode.BadRequest, "User doesn't exists with this email");
     } else {
-        let {isMatch} = await user.comparePassword(req.body.oldPassword)
+        let { isMatch } = await user.comparePassword(req.body.oldPassword)
 
         if (!isMatch) {
             throw new AppError(HttpStatusCode.NotAcceptable, "Your old password is wrong.");
         }
-
         user.password = req.body.newPassword;
         await user.save()
 
-        // Send OTP Code to user email
-        return {
-            message: "Your account password has been changed."
-        }
+        return { message: "Your account password has been changed." }
     }
 };
 
@@ -183,25 +172,14 @@ export const resetPasswordService = async (req: Request, res: Response, next: Ne
     if (!user) {
         throw new AppError(HttpStatusCode.BadRequest, "User doesn't exists with this email");
     } else {
+        if (user.authCode === req.body.authCode) {
+            user.password = req.body.newPassword;
+            user.isEmailVerified = true;
+            await user.save()
 
-        // Getting authCode by generating random digits
-        let authCode = await generateRandomDigits(6)
-
-        // Saving user object with authCode to match later during email verification process
-        user.authCode = authCode + ""
-        user.isEmailVerified = false;
-        await user.save()
-
-        // Now, sending an email notification for email verification
-        await sendEmailNotification({
-            to: user.email,
-            subject: "Expinco Email Verification",
-            textMessage: `Your auth code is ${authCode}.`
-        })
-
-        // Send OTP Code to user email
-        return {
-            message: "Check your email for OTP Code."
+            return { message: "Your account's password has been reset." }
+        } else {
+            throw new AppError(HttpStatusCode.BadRequest, "You have entered an invalid authcode");
         }
     }
 };
