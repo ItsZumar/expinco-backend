@@ -5,8 +5,9 @@ import { HttpStatusCode } from "../../../errors/types/HttpStatusCode";
 import { signJWT } from "../../../util/jwt";
 import { sendEmailNotification } from "../../../config/sendGridMail";
 import { generateRandomDigits } from '../../../util/common'
+import { ChangePasswordI, EmailSignInI, EmailSignUpI, ForgetPasswordI, ResendVerifyEmailI, ResetPasswordI, VerifyEmailI } from "./response/user.response";
 
-export const emailSignupService = async (req: Request, res: Response, next: NextFunction): Promise<{ token: string, user: UserDocument }> => {
+export const emailSignupService = async (req: Request, res: Response, next: NextFunction): Promise<EmailSignUpI> => {
     const usersInDB = await User.find({ email: req.body.email });
 
     if (usersInDB.length) {
@@ -43,7 +44,7 @@ export const emailSignupService = async (req: Request, res: Response, next: Next
     return { token, user }
 };
 
-export const emailSigninService = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+export const emailSigninService = async (req: Request, res: Response, next: NextFunction): Promise<EmailSignInI> => {
     const user = await User.findOne({ email: req.body.email })
     const token = await signJWT(user._id)
 
@@ -53,10 +54,9 @@ export const emailSigninService = async (req: Request, res: Response, next: Next
         let { isMatch } = await user.comparePassword(req.body.password);
 
         if (isMatch) {
-            let mUser = { ...user.toJSON() };
-            mUser.password = undefined;
-            mUser.authCode = undefined;
-            return { user: mUser, token };
+            user.password = undefined;
+            user.authCode = undefined;
+            return { user: user, token };
         }
         else {
             throw new AppError(HttpStatusCode.BadRequest, "Either email or password is invalid");
@@ -64,7 +64,7 @@ export const emailSigninService = async (req: Request, res: Response, next: Next
     }
 };
 
-export const forgotPasswordService = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+export const forgotPasswordService = async (req: Request, res: Response, next: NextFunction): Promise<ForgetPasswordI> => {
     const user = await User.findOne({ email: req.body.email })
 
     if (!user) {
@@ -91,7 +91,7 @@ export const forgotPasswordService = async (req: Request, res: Response, next: N
     }
 };
 
-export const changePasswordService = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+export const changePasswordService = async (req: Request, res: Response, next: NextFunction): Promise<ChangePasswordI> => {
     const user = await User.findOne({ email: req.user.email })
 
     if (!user) {
@@ -109,7 +109,7 @@ export const changePasswordService = async (req: Request, res: Response, next: N
     }
 };
 
-export const verifyEmailService = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+export const verifyEmailService = async (req: Request, res: Response, next: NextFunction): Promise<VerifyEmailI> => {
     const { email, authCode } = req.body
     const user = await User.findOne({ email })
 
@@ -134,14 +134,12 @@ export const verifyEmailService = async (req: Request, res: Response, next: Next
     }
 };
 
-export const resendVerifyEmailService = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
-    const { email } = req.body
-    const user = await User.findOne({ email })
+export const resendVerifyEmailService = async (req: Request, res: Response, next: NextFunction): Promise<ResendVerifyEmailI> => {
+    const user = await User.findOne({ email: req.body.email })
 
     if (!user) {
         throw new AppError(HttpStatusCode.BadRequest, "User doesn't exists with this email");
     } else {
-
         if (user.isEmailVerified) {
             throw new AppError(HttpStatusCode.Conflict, "This email is already verified!");
         }
@@ -166,7 +164,7 @@ export const resendVerifyEmailService = async (req: Request, res: Response, next
     }
 };
 
-export const resetPasswordService = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+export const resetPasswordService = async (req: Request, res: Response, next: NextFunction): Promise<ResetPasswordI> => {
     const user = await User.findOne({ email: req.body.email })
 
     if (!user) {

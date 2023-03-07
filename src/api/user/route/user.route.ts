@@ -11,7 +11,7 @@ router.post("/resend-verify-email", UserController.resendVerifyEmail);
 router.post("/forgot-password", UserController.forgotPassword);
 router.post("/change-password", ProtectedRoute, UserController.changePassword)
 router.post("/reset-password", UserController.resetPassword)
-router.get("/me", ProtectedRoute.bind(this), (req, res) => {
+router.get("/me", ProtectedRoute, (req, res) => {
     res.send("Hello World")
 })
 
