@@ -6,26 +6,26 @@ import { decodeJWT } from "../util/jwt";
 import { User } from "../api/user/model/user.model";
 
 export const ProtectedRoute = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+
     let token;
-    if (
-        req.headers.authorization &&
-        req.headers.authorization.startsWith('Bearer')
-    ) {
-        token = req.headers.authorization.split(' ')[1];
+    let reqHeaderAuth = req.headers.authorization;
+
+    if (reqHeaderAuth && reqHeaderAuth.startsWith('Bearer')) {
+        token = reqHeaderAuth.split(' ')[1];
     }
 
     if (!token) {
-        next(new AppError(HttpStatusCode.Unauthorized, "You are not logged in! Please login to access this!"));
+        throw new AppError(HttpStatusCode.Unauthorized, "You are not logged in! Please login to access this!");
     }
 
     // 2) Verification token
-    const decodedUser = decodeJWT(token)
+    const decodedUser = await decodeJWT(token)
     console.log("decoded ++===++ ", decodedUser);
 
     // 3) Check if user still exists (if deleted from DB or not)
     const currentUser = await User.findById(decodedUser)
     if (!currentUser) {
-        next(new AppError(HttpStatusCode.Unauthorized, "The user belonging to the token no longer exists."));
+        throw new AppError(HttpStatusCode.Unauthorized, "The user belonging to the token no longer exists.");
     }
 
     // 4) Check if user changed password after the token was issued

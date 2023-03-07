@@ -47,7 +47,8 @@ export const forgotPassword = catchAsync(async (req: Request, res: Response, nex
 });
 
 export const changePassword = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-    await check("email", "Email is not valid").isEmail().run(req);
+    await check("oldPassword", "Please enter your old password.").isString().run(req)
+    await check("newPassword", "Please enter your new password").isString().run(req);
 
     apiValidation(req, res);
     const result = await changePasswordService(req, res, next);

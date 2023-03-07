@@ -56,7 +56,7 @@ export const emailSigninService = async (req: Request, res: Response, next: Next
             let mUser = { ...user.toJSON() };
             mUser.password = undefined;
             mUser.authCode = undefined;
-            return {user: mUser, token};
+            return { user: mUser, token };
         }
         else {
             throw new AppError(HttpStatusCode.BadRequest, "Either email or password is invalid");
@@ -94,21 +94,28 @@ export const forgotPasswordService = async (req: Request, res: Response, next: N
 };
 
 export const changePasswordService = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
-    
 
-    
-    const user = await User.findOne({ email: req.body.email })
+    console.log("req.user.email ", req.user.email)
+
+    const user = await User.findOne({ email: req.user.email })
+
+    console.log("user === ", user)
 
     if (!user) {
         throw new AppError(HttpStatusCode.BadRequest, "User doesn't exists with this email");
     } else {
+        let {isMatch} = await user.comparePassword(req.body.oldPassword)
 
+        if (!isMatch) {
+            throw new AppError(HttpStatusCode.NotAcceptable, "Your old password is wrong.");
+        }
 
+        user.password = req.body.newPassword;
         await user.save()
 
         // Send OTP Code to user email
         return {
-            message: "Check your email for OTP Code."
+            message: "Your account password has been changed."
         }
     }
 };
