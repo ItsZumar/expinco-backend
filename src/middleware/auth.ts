@@ -13,7 +13,6 @@ export const ProtectedRoute = catchAsync(async (req: Request, res: Response, nex
     if (reqHeaderAuth && reqHeaderAuth.startsWith('Bearer')) {
         token = reqHeaderAuth.split(' ')[1];
     }
-
     if (!token) {
         throw new AppError(HttpStatusCode.Unauthorized, "You are not logged in! Please login to access this!");
     }
