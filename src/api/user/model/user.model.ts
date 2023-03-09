@@ -38,12 +38,16 @@ const userSchema = new Schema<UserDocument>(
 userSchema.pre("save", async function (next) {
   const user = this as UserDocument;
 
+  // If password is changed, we again generate hash
   if (user.isModified("password")) {
     user.password = await bcrypt.hash(user.password, 10)
   }
   next();
 });
 
+/**
+ * Password comparison method.
+ */
 userSchema.methods.comparePassword = async function (password: string) {
   let isMatch = await bcrypt.compare(password, this.password);
   return { isMatch };
