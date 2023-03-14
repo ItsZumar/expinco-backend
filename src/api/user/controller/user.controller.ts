@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { check } from "express-validator";
 import { apiOk, apiValidation, catchAsync } from "../../../util/apiHelpers";
-import { emailSignupService, emailSigninService, forgotPasswordService, verifyEmailService, resendVerifyEmailService, changePasswordService, resetPasswordService, getProfileService } from "../service/user.service";
+import { emailSignupService, emailSigninService, forgotPasswordService, verifyEmailService, resendVerifyEmailService, changePasswordService, resetPasswordService, getProfileService, updateProfileService } from "../service/user.service";
 
 export const emailSignup = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     await check("firstname", "Firstname is not valid").isString().run(req);
@@ -68,5 +68,15 @@ export const resetPassword = catchAsync(async (req: Request, res: Response, next
 export const getProfile = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     apiValidation(req, res);
     const result = await getProfileService(req, res, next);
+    apiOk(res, result);
+});
+
+export const updateProfile = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+    await check("firstname", "Firstname is not valid").isString().optional().run(req);
+    await check("lastname", "Lastname is not valid").isString().optional().run(req);
+    await check("email", "Email is not valid").isEmail().optional().run(req);
+
+    apiValidation(req, res);
+    const result = await updateProfileService(req, res, next);
     apiOk(res, result);
 });

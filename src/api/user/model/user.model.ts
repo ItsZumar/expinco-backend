@@ -19,14 +19,8 @@ const userSchema = new Schema<UserDocument>(
     lastname: String,
     email: { type: String, unique: true, required: true, lowercase: true },
     password: String,
-    isEmailVerified: {
-      type: Boolean,
-      default: false,
-    },
-    authCode: {
-      type: String,
-      default: null,
-    },
+    isEmailVerified: { type: Boolean, default: false },
+    authCode: { type: String, default: null },
   },
   { timestamps: true, versionKey: false }
 );

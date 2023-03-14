@@ -12,5 +12,6 @@ router.post("/forgot-password", UserController.forgotPassword);
 router.post("/change-password", ProtectedRoute, UserController.changePassword)
 router.post("/reset-password", UserController.resetPassword)
 router.get("/get-profile", ProtectedRoute, UserController.getProfile)
+router.post("/update-profile", ProtectedRoute, UserController.updateProfile)
 
 export default router;

@@ -195,3 +195,23 @@ export const getProfileService = async (req: Request, res: Response, next: NextF
         return { user: user }
     }
 };
+
+export const updateProfileService = async (req: Request, res: Response, next: NextFunction): Promise<any> => {    
+    const user = await User.findOne({ id: req.user.id })
+
+    if (!user) {
+        throw new AppError(HttpStatusCode.BadRequest, "User doesn't exists with this email");
+    } else {
+
+        if (req.body.firstname) {
+            user.firstname = req.body.firstname
+        }
+
+        if (req.body.lastname) {
+            user.lastname = req.body.lastname
+        }
+        await user.save()
+
+        return { user: user }
+    }
+};
