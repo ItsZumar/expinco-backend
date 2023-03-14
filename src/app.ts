@@ -1,5 +1,5 @@
 import { errorUncughtException, errorHandler404, errorHandlerAll, errorUnhandledRejection } from "./util/apiHelpers";
-import { MONGODB_URI, SESSION_SECRET } from "./util/secrets";
+import { MONGODB_URI, SESSION_SECRET } from "./config/secrets";
 
 process.on("uncaughtException", errorUncughtException);
 

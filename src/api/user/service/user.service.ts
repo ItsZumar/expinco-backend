@@ -181,3 +181,17 @@ export const resetPasswordService = async (req: Request, res: Response, next: Ne
         }
     }
 };
+
+export const getProfileService = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+    const user = await User.findOne({ email: req.user.email })
+
+    if (!user) {
+        throw new AppError(HttpStatusCode.BadRequest, "User doesn't exists with this email");
+    } else {
+
+        user.password = undefined
+        user.authCode = undefined
+
+        return { user: user }
+    }
+};

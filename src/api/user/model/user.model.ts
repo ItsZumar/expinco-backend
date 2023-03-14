@@ -1,7 +1,6 @@
-import mongoose, { Schema, Document } from "mongoose";
 import bcrypt from "bcrypt";
-
-const BCRYPT_SALT = process.env.BCRYPT_SALT
+import mongoose, { Schema, Document } from "mongoose";
+import { BCRYPT_SALT } from '../../../config/secrets';
 
 export type UserDocument = Document & {
   firstname: string;
@@ -18,7 +17,7 @@ const userSchema = new Schema<UserDocument>(
   {
     firstname: String,
     lastname: String,
-    email: { type: String, unique: true, required: true, lowercase: true},
+    email: { type: String, unique: true, required: true, lowercase: true },
     password: String,
     isEmailVerified: {
       type: Boolean,
@@ -40,7 +39,7 @@ userSchema.pre("save", async function (next) {
 
   // If password is changed, we again generate hash
   if (user.isModified("password")) {
-    user.password = await bcrypt.hash(user.password, 10)
+    user.password = await bcrypt.hash(user.password, Number(BCRYPT_SALT))
   }
   next();
 });
