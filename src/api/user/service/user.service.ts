@@ -1,4 +1,4 @@
-import { User, UserDocument } from "../model/user.model";
+import { User } from "../model/user.model";
 import { NextFunction, Request, Response } from "express";
 import { AppError } from "../../../errors/error.base";
 import { HttpStatusCode } from "../../../errors/types/HttpStatusCode";
@@ -9,6 +9,8 @@ import { ChangePasswordI, EmailSignInI, EmailSignUpI, ForgetPasswordI, ResendVer
 
 export const emailSignupService = async (req: Request, res: Response, next: NextFunction): Promise<EmailSignUpI> => {
     const usersInDB = await User.find({ email: req.body.email });
+
+    console.log("usersInDB === ", usersInDB)
 
     if (usersInDB.length) {
         next(new AppError(HttpStatusCode.Conflict, "User already exists with this email!"));
@@ -46,12 +48,12 @@ export const emailSignupService = async (req: Request, res: Response, next: Next
 
 export const emailSigninService = async (req: Request, res: Response, next: NextFunction): Promise<EmailSignInI> => {
     const user = await User.findOne({ email: req.body.email })
-    const token = await signJWT(user._id)
-
+    
     if (!user) {
         throw new AppError(HttpStatusCode.BadRequest, "Either email or password is invalid");
     } else {
         let { isMatch } = await user.comparePassword(req.body.password);
+        let token = await signJWT(user._id)
 
         if (isMatch) {
             user.password = undefined;
