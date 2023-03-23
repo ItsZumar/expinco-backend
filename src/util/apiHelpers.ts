@@ -60,14 +60,9 @@ export const createServiceResponse = <T>(data: any, dto: T): T => {
   return extractFields(dto, mergedData);
 };
 
-export const apiOk = async <T>(res: Response, result: any) => {
-  const r1 = injectPaginationIfResultIsTruthy(res, result);
-  const r2 = generateApiOkResponse(result);
-  return res.status(200).json(r2);
-};
-
-const injectPaginationIfResultIsTruthy = (res: Response, result: any) => {
-  return result && result.length ? injectPagination(res, result) : result;
+export const apiOk = async <T>(res: Response, result: any, model?: any) => {
+  const okResult = generateApiOkResponse(result);
+  return res.status(200).json(okResult);
 };
 
 const generateApiOkResponse = (result: any): ApiResponse => {
@@ -76,23 +71,6 @@ const generateApiOkResponse = (result: any): ApiResponse => {
     error: "",
     stack: "",
   };
-};
-
-const injectPagination = (res: Response, result: any) => {
-  // if (result.pagination && (result.pagination.next === "" || result.pagination.next)) {
-  //   const fullUrl = res.req?.protocol + "://" + res.req?.get("host") + res.req?.originalUrl;
-  //   const nextpage = fullUrl + `?page=${result.pagination.page + 1}&perPage=${result.pagination.perPage}`;
-  //   const prevpage = fullUrl + `?page=${result.pagination.page - 1}&perPage=${result.pagination.perPage}`;
-  //   result.pagination.next = null;
-  //   result.pagination.previous = null;
-  //   if (result.pagination.hasNext) {
-  //     result.pagination.next = nextpage;
-  //   }
-  //   if (result.pagination.hasPrevious) {
-  //     result.pagination.previous = prevpage;
-  //   }
-  // }
-  return result;
 };
 
 // ================== ABOVE CODE IS WRITTEN BY ME =================================

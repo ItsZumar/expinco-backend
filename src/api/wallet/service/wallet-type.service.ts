@@ -5,25 +5,8 @@ import { HttpStatusCode } from "../../../errors/types/HttpStatusCode";
 import { ListWalletTypeI, AddWalletTypeI, UpdateWalletTypeI, DeleteWalletTypeI } from "./response/wallet-type.response";
 
 export const listWalletTypeService = async (req: Request, res: Response, next: NextFunction): Promise<ListWalletTypeI> => {
-
-    console.log("req.query", req.query)
-
-    return {
-        status: 'good'
-    }
-
-    //   const walletTypeInDB = await WalletType.findOne({ name: req.body.name });
-
-//   if (walletTypeInDB) {
-//     throw new AppError(HttpStatusCode.Conflict, "A wallet type with this name already exists!");
-//   } else {
-//     const newWalletType = new WalletType({
-//       name: req.body.name,
-//       icon: req.body.icon ? req.body.icon : null,
-//     });
-//     let newlyCreatedwalletType = await newWalletType.save();
-//     return newlyCreatedwalletType;
-//   }
+  const walletTypeData = req.result;
+  return walletTypeData;
 };
 
 export const addWalletTypeService = async (req: Request, res: Response, next: NextFunction): Promise<AddWalletTypeI> => {

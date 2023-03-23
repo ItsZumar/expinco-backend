@@ -6,7 +6,6 @@ import { decodeJWT } from "../util/jwt";
 import { User } from "../api/user/model/user.model";
 
 export const ProtectedRoute = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-
     let token;
     let reqHeaderAuth = req.headers.authorization;
 
