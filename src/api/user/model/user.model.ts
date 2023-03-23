@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt";
 import mongoose, { Schema, Document } from "mongoose";
-import { BCRYPT_SALT } from '../../../config/secrets';
+import { BCRYPT_SALT } from "../../../config/secrets";
 
 export type UserDocument = Document & {
   firstname: string;
@@ -33,7 +33,7 @@ userSchema.pre("save", async function (next) {
 
   // If password is changed, we again generate hash
   if (user.isModified("password")) {
-    user.password = await bcrypt.hash(user.password, Number(BCRYPT_SALT))
+    user.password = await bcrypt.hash(user.password, Number(BCRYPT_SALT));
   }
   next();
 });

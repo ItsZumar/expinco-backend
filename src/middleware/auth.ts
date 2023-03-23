@@ -19,7 +19,6 @@ export const ProtectedRoute = catchAsync(async (req: Request, res: Response, nex
 
     // 2) Verification token
     const decodedUser = await decodeJWT(token)
-    console.log("decoded ++===++ ", decodedUser);
 
     // 3) Check if user still exists (if deleted from DB or not)
     const currentUser = await User.findById(decodedUser)

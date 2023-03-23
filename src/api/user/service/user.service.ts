@@ -1,16 +1,14 @@
 import { User } from "../model/user.model";
+import { signJWT } from "../../../util/jwt";
 import { NextFunction, Request, Response } from "express";
 import { AppError } from "../../../errors/error.base";
 import { HttpStatusCode } from "../../../errors/types/HttpStatusCode";
-import { signJWT } from "../../../util/jwt";
 import { sendEmailNotification } from "../../../config/sendGridMail";
 import { generateRandomDigits } from '../../../util/common'
 import { ChangePasswordI, EmailSignInI, EmailSignUpI, ForgetPasswordI, ResendVerifyEmailI, ResetPasswordI, VerifyEmailI } from "./response/user.response";
 
 export const emailSignupService = async (req: Request, res: Response, next: NextFunction): Promise<EmailSignUpI> => {
     const usersInDB = await User.find({ email: req.body.email });
-
-    console.log("usersInDB === ", usersInDB)
 
     if (usersInDB.length) {
         next(new AppError(HttpStatusCode.Conflict, "User already exists with this email!"));
@@ -47,6 +45,8 @@ export const emailSignupService = async (req: Request, res: Response, next: Next
 };
 
 export const emailSigninService = async (req: Request, res: Response, next: NextFunction): Promise<EmailSignInI> => {
+    const {password}: { email: string; password: string } = req.body 
+    
     const user = await User.findOne({ email: req.body.email })
     
     if (!user) {
