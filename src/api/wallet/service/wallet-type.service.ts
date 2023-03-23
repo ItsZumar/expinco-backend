@@ -1,0 +1,69 @@
+import { WalletType } from "../model/wallet-type.model";
+import { NextFunction, Request, Response } from "express";
+import { AppError } from "../../../errors/error.base";
+import { HttpStatusCode } from "../../../errors/types/HttpStatusCode";
+import { ListWalletTypeI, AddWalletTypeI, UpdateWalletTypeI, DeleteWalletTypeI } from "./response/wallet-type.response";
+
+export const listWalletTypeService = async (req: Request, res: Response, next: NextFunction): Promise<ListWalletTypeI> => {
+
+    console.log("req.query", req.query)
+
+    return {
+        status: 'good'
+    }
+
+    //   const walletTypeInDB = await WalletType.findOne({ name: req.body.name });
+
+//   if (walletTypeInDB) {
+//     throw new AppError(HttpStatusCode.Conflict, "A wallet type with this name already exists!");
+//   } else {
+//     const newWalletType = new WalletType({
+//       name: req.body.name,
+//       icon: req.body.icon ? req.body.icon : null,
+//     });
+//     let newlyCreatedwalletType = await newWalletType.save();
+//     return newlyCreatedwalletType;
+//   }
+};
+
+export const addWalletTypeService = async (req: Request, res: Response, next: NextFunction): Promise<AddWalletTypeI> => {
+  const walletTypeInDB = await WalletType.findOne({ name: req.body.name });
+
+  if (walletTypeInDB) {
+    throw new AppError(HttpStatusCode.Conflict, "A wallet type with this name already exists!");
+  } else {
+    const newWalletType = new WalletType({
+      name: req.body.name,
+      icon: req.body.icon ? req.body.icon : null,
+    });
+    let newlyCreatedwalletType = await newWalletType.save();
+    return newlyCreatedwalletType;
+  }
+};
+
+export const updateWalletTypeService = async (req: Request, res: Response, next: NextFunction): Promise<UpdateWalletTypeI> => {
+  const updatedWalletType = await WalletType.findByIdAndUpdate(
+    { _id: req.body._id },
+    {
+      name: req.body.name,
+      icon: req.body.icon,
+    },
+    { returnOriginal: false }
+  );
+
+  if (!updatedWalletType) {
+    throw new AppError(HttpStatusCode.Conflict, "A wallet type is not found with this id.");
+  } else {
+    return updatedWalletType;
+  }
+};
+
+export const deleteWalletTypeService = async (req: Request, res: Response, next: NextFunction): Promise<DeleteWalletTypeI> => {
+  const updatedWalletType = await WalletType.findByIdAndDelete({ _id: req.params.id });
+
+  if (!updatedWalletType) {
+    throw new AppError(HttpStatusCode.Conflict, "A wallet type is not found with this id.");
+  } else {
+    return updatedWalletType;
+  }
+};

@@ -11,7 +11,7 @@ export const emailSignupService = async (req: Request, res: Response, next: Next
     const usersInDB = await User.find({ email: req.body.email });
 
     if (usersInDB.length) {
-        next(new AppError(HttpStatusCode.Conflict, "User already exists with this email!"));
+        throw new AppError(HttpStatusCode.Conflict, "User already exists with this email!");
     }
     const newUser = new User({
         firstname: req.body.firstname,
