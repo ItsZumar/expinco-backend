@@ -11,7 +11,6 @@ export const listWalletType = catchAsync(async (req: any, res: Response, next: N
 
 export const addWalletType = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
   await check("name", "Name of wallet type is required.").isString().run(req);
-
   apiValidation(req, res);
   const result = await addWalletTypeService(req, res, next);
   apiOk(res, result);
@@ -19,7 +18,6 @@ export const addWalletType = catchAsync(async (req: Request, res: Response, next
 
 export const updateWalletType = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
   await check("_id", "A valid id of wallet type is required.").isString().run(req);
-
   apiValidation(req, res);
   const result = await updateWalletTypeService(req, res, next);
   apiOk(res, result);
