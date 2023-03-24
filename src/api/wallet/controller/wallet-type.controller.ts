@@ -3,7 +3,7 @@ import { check } from "express-validator";
 import { apiOk, apiValidation, catchAsync } from "../../../util/apiHelpers";
 import { listWalletTypeService, addWalletTypeService, updateWalletTypeService, deleteWalletTypeService } from "../service/wallet-type.service";
 
-export const listWalletType = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+export const listWalletType = catchAsync(async (req: any, res: Response, next: NextFunction) => {
   apiValidation(req, res);
   const result = await listWalletTypeService(req, res, next);
   apiOk(res, result);

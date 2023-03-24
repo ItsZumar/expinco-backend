@@ -2,11 +2,11 @@ import { WalletType } from "../model/wallet-type.model";
 import { NextFunction, Request, Response } from "express";
 import { AppError } from "../../../errors/error.base";
 import { HttpStatusCode } from "../../../errors/types/HttpStatusCode";
+import { ListWalletTypeReqI } from "./request/wallet-type.request";
 import { ListWalletTypeI, AddWalletTypeI, UpdateWalletTypeI, DeleteWalletTypeI } from "./response/wallet-type.response";
 
-export const listWalletTypeService = async (req: Request, res: Response, next: NextFunction): Promise<ListWalletTypeI> => {
-  const walletTypeData = req.result;
-  return walletTypeData;
+export const listWalletTypeService = async (req: ListWalletTypeReqI, res: Response, next: NextFunction): Promise<ListWalletTypeI> => {
+  return req.result;
 };
 
 export const addWalletTypeService = async (req: Request, res: Response, next: NextFunction): Promise<AddWalletTypeI> => {
