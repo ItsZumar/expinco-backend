@@ -25,6 +25,7 @@ export const updateWalletType = catchAsync(async (req: Request, res: Response, n
 
 export const deleteWalletType = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
   apiValidation(req, res);
+  
   const result = await deleteWalletTypeService(req, res, next);
   apiOk(res, result);
 });
