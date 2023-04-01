@@ -18,7 +18,14 @@ mkdir -p model
 touch model/${ENTITY_NAME}.model.ts
 
 mkdir -p service
+mkdir -p service/response
+touch service/response/${ENTITY_NAME}.response.ts
 touch service/${ENTITY_NAME}.service.ts
+
+mkdir -p route
+touch route/${ENTITY_NAME}.route.ts
+
+# touch route/${ENTITY_NAME}.route.ts
 
 # Going back again in root folder
 cd ..
