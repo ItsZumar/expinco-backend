@@ -4,6 +4,7 @@
   "description": "Backend application for expinco",
   "main": "app.ts",
   "scripts": {
+    "generate": "cd ./scripts/ && bash gmcs.sh",
     "build-ts": "tsc",
     "build": "rm -rf dist && npm run build-ts && npm run lint",
     "debug": "npm run build && npm run watch-debug",
