@@ -5,7 +5,6 @@ import { HttpStatusCode } from "../../../errors/types/HttpStatusCode";
 import { AddWalletI, DeleteWalletI, ListWalletI, UpdateWalletI } from "./response/wallet.response";
 import { isValidObjectId } from "mongoose";
 import { WalletType } from "../model/wallet-type.model";
-import { User } from "../../user/model/user.model";
 
 export const listWalletService = async (req: Request, res: Response, next: NextFunction): Promise<ListWalletI | any> => {
   const page = parseInt(req.query.page as string) || 1;

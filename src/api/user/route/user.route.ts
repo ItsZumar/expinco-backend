@@ -9,8 +9,9 @@ router.post("/email-signin", UserController.emailSignin);
 router.post("/verify-email", UserController.verifyEmail);
 router.post("/resend-verify-email", UserController.resendVerifyEmail);
 router.post("/forgot-password", UserController.forgotPassword);
-router.post("/change-password", ProtectedRoute, UserController.changePassword)
 router.post("/reset-password", UserController.resetPassword)
+router.post("/change-password", ProtectedRoute, UserController.changePassword)
+
 router.get("/get-profile", ProtectedRoute, UserController.getProfile)
 router.post("/update-profile", ProtectedRoute, UserController.updateProfile)
 

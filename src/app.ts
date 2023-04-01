@@ -37,7 +37,9 @@ app.use(lusca.xssProtection(true));
 // Routes Listings
 app.use("/v1/user/auth", routes.user);
 app.use("/v1/user/wallet", routes.wallet);
-app.use("/app", (req, res) => {
+app.use("/v1/category", routes.transactionCategory);
+
+app.use("/", (req, res) => {
     res.json({
         status: "LIVE FROM EXPINCO"
     })
