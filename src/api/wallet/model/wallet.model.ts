@@ -1,16 +1,16 @@
 import mongoose, { Schema, Document, Types } from "mongoose";
 
 export type WalletDocument = Document & {
-  amount: number;
   name: string;
-  type: Types.ObjectId;
+  amount: number;
+  walletType: Types.ObjectId;
 };
 
 const walletSchema = new Schema<WalletDocument>(
   {
     amount: { required: true, type: Number },
     name: { type: String, required: true },
-    type: { type: Schema.Types.ObjectId, ref: "WalletType" },
+    walletType: { type: Schema.Types.ObjectId, ref: "WalletType", required: true },
   },
   { timestamps: true, versionKey: false }
 );

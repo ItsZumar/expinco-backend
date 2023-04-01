@@ -1,7 +1,12 @@
 import { NextFunction, Request, Response } from "express";
 import { check } from "express-validator";
 import { apiOk, apiValidation, catchAsync } from "../../../util/apiHelpers";
-import { listWalletTypeService, addWalletTypeService, updateWalletTypeService, deleteWalletTypeService } from "../service/wallet-type.service";
+import {
+  listWalletTypeService,
+  addWalletTypeService,
+  updateWalletTypeService,
+  deleteWalletTypeService,
+} from "../service/wallet-type.service";
 
 export const listWalletType = catchAsync(async (req: any, res: Response, next: NextFunction) => {
   apiValidation(req, res);
@@ -25,7 +30,7 @@ export const updateWalletType = catchAsync(async (req: Request, res: Response, n
 
 export const deleteWalletType = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
   apiValidation(req, res);
-  
+
   const result = await deleteWalletTypeService(req, res, next);
   apiOk(res, result);
 });

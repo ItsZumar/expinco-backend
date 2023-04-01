@@ -5,7 +5,7 @@ import { HttpStatusCode } from "../../../errors/types/HttpStatusCode";
 import { ListWalletTypeReqI } from "./request/wallet-type.request";
 import { ListWalletTypeI, AddWalletTypeI, UpdateWalletTypeI, DeleteWalletTypeI } from "./response/wallet-type.response";
 
-export const listWalletTypeService = async (req: ListWalletTypeReqI, res: Response, next: NextFunction): Promise<ListWalletTypeI> => {
+export const listWalletTypeService = async (req: ListWalletTypeReqI, res: Response, next: NextFunction): Promise<ListWalletTypeI> => {  
   return req.result;
 };
 
