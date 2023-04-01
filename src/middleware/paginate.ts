@@ -18,8 +18,8 @@ export interface IPagination {
 
 export const paginate = (model: Model<any>) => {
   return catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-    const page = parseInt(req.query.page);
-    const limit = parseInt(req.query.perPage);
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.perPage as string) || 10;
 
     if (page <= 0 || limit <= 0) {
       throw new AppError(HttpStatusCode.BadRequest, "Pagination parameters must be greater than 0!");

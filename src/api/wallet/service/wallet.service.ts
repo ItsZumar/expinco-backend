@@ -2,9 +2,37 @@ import { Wallet } from "../model/wallet.model";
 import { NextFunction, Request, Response } from "express";
 import { AppError } from "../../../errors/error.base";
 import { HttpStatusCode } from "../../../errors/types/HttpStatusCode";
-import { AddWalletI, DeleteWalletI, UpdateWalletI } from "./response/wallet.response";
+import { AddWalletI, DeleteWalletI, ListWalletI, UpdateWalletI } from "./response/wallet.response";
 import { isValidObjectId } from "mongoose";
 import { WalletType } from "../model/wallet-type.model";
+
+export const listWalletService = async (req: Request, res: Response, next: NextFunction): Promise<ListWalletI> => {
+  const page = parseInt(req.query.page as string) || 1;
+  const limit = parseInt(req.query.perPage as string) || 10;
+
+  if (page <= 0 || limit <= 0) {
+    throw new AppError(HttpStatusCode.BadRequest, "Pagination parameters must be greater than 0!");
+  }
+
+  const startIndex = (page - 1) * limit;
+  const endIndex = page * limit;
+  const hasPrevious = startIndex > 0 ? true : false;
+  const hasNext = endIndex < (await Wallet.find({ owner: req.user._id }).countDocuments().exec()) ? true : false;
+
+  const walletsInDB = await Wallet.find({ owner: req.user._id }).limit(limit).skip(startIndex);
+
+  const result = {
+    data: walletsInDB,
+    pagination: {
+      page: page,
+      perPage: limit,
+      hasPrevious: hasPrevious,
+      hasNext: hasNext,
+    },
+  };
+
+  return result;
+};
 
 export const addWalletService = async (req: Request, res: Response, next: NextFunction): Promise<AddWalletI> => {
   const walletInDB = await Wallet.findOne({ name: req.body.name });
@@ -20,7 +48,7 @@ export const addWalletService = async (req: Request, res: Response, next: NextFu
       name: req.body.name,
       walletType: req.body.walletType,
       amount: req.body.amount,
-      owner: req.user._id
+      owner: req.user._id,
     });
 
     let newlyCreatedwalletType = await newWallet.save();

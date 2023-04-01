@@ -14,6 +14,7 @@ router.patch("/update-type", WalletTypeController.updateWalletType);
 router.delete("/delete-type/:id", WalletTypeController.deleteWalletType);
 
 // Routes for Wallet
+router.get("/list-wallet", ProtectedRoute, WalletController.listWallet);
 router.post("/add-wallet", ProtectedRoute, WalletController.addWallet);
 router.patch("/update-wallet/:id", ProtectedRoute, WalletController.updateWallet);
 router.delete("/delete-wallet/:id", ProtectedRoute, WalletController.deleteWallet);
