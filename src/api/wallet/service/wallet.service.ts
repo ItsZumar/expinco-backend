@@ -5,8 +5,9 @@ import { HttpStatusCode } from "../../../errors/types/HttpStatusCode";
 import { AddWalletI, DeleteWalletI, ListWalletI, UpdateWalletI } from "./response/wallet.response";
 import { isValidObjectId } from "mongoose";
 import { WalletType } from "../model/wallet-type.model";
+import { User } from "../../user/model/user.model";
 
-export const listWalletService = async (req: Request, res: Response, next: NextFunction): Promise<ListWalletI> => {
+export const listWalletService = async (req: Request, res: Response, next: NextFunction): Promise<ListWalletI | any> => {
   const page = parseInt(req.query.page as string) || 1;
   const limit = parseInt(req.query.perPage as string) || 10;
 
@@ -19,7 +20,7 @@ export const listWalletService = async (req: Request, res: Response, next: NextF
   const hasPrevious = startIndex > 0 ? true : false;
   const hasNext = endIndex < (await Wallet.find({ owner: req.user._id }).countDocuments().exec()) ? true : false;
 
-  const walletsInDB = await Wallet.find({ owner: req.user._id }).limit(limit).skip(startIndex);
+  var walletsInDB = await Wallet.find({ owner: req.user._id }).limit(limit).skip(startIndex);
 
   const result = {
     data: walletsInDB,
@@ -64,6 +65,10 @@ export const updateWalletService = async (req: Request, res: Response, next: Nex
 
   // Find the wallet by ID
   const wallet = await Wallet.findById(req.params.id);
+
+  if (!wallet) {
+    throw new AppError(HttpStatusCode.NotFound, "A wallet doesn't exist with this id.");
+  }
 
   // Create ObjectIds for the creator and current user
   const creatorId = wallet.owner;

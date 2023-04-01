@@ -1,12 +1,8 @@
 import { IPagination } from "../../../../middleware/paginate";
 import { WalletTypeDocument } from "../../model/wallet-type.model";
 
-export interface ListWalletTypeReq extends Request {
-  result: ListWalletTypeI;
-}
-
 export type ListWalletTypeI = {
-  data: WalletTypeDocument[];
+  data: Array<WalletTypeDocument>;
   pagination: IPagination;
 };
 export type AddWalletTypeI = WalletTypeDocument & {};
