@@ -1,5 +1,4 @@
 import { Wallet } from "../model/wallet.model";
-import { User } from "../../user/model/user.model";
 import { NextFunction, Request, Response } from "express";
 import { AppError } from "../../../errors/error.base";
 import { HttpStatusCode } from "../../../errors/types/HttpStatusCode";
