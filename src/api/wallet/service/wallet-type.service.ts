@@ -4,13 +4,18 @@ import { AppError } from "../../../errors/error.base";
 import { HttpStatusCode } from "../../../errors/types/HttpStatusCode";
 import { ListWalletTypeReqI } from "./request/wallet-type.request";
 import { ListWalletTypeI, AddWalletTypeI, UpdateWalletTypeI, DeleteWalletTypeI } from "./response/wallet-type.response";
+import { isValidObjectId } from "mongoose";
 
-export const listWalletTypeService = async (req: ListWalletTypeReqI, res: Response, next: NextFunction): Promise<ListWalletTypeI> => {  
+export const listWalletTypeService = async (req: ListWalletTypeReqI, res: Response, next: NextFunction): Promise<ListWalletTypeI> => {
   return req.result;
 };
 
 export const addWalletTypeService = async (req: Request, res: Response, next: NextFunction): Promise<AddWalletTypeI> => {
-  const walletTypeInDB = await WalletType.findOne({ name: req.body.name });
+  if (!isValidObjectId(req.body._id)) {
+    throw new AppError(HttpStatusCode.BadRequest, "Wallet Type id is not valid!");
+  }
+
+  const walletTypeInDB = await WalletType.findOne({ _id: req.body._id });
 
   if (walletTypeInDB) {
     throw new AppError(HttpStatusCode.Conflict, "A wallet type with this name already exists!");
