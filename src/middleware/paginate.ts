@@ -6,18 +6,18 @@ import { catchAsync } from "../util/apiHelpers";
 
 export interface IPaginateResult<T> {
   data: T[];
-  pagination: IPagination;
+  pagination: PaginationI;
 }
 
-export interface IPagination {
+export interface PaginationI {
   page: number | null;
   perPage: number | null;
   hasPrevious: boolean | null;
   hasNext: boolean | null;
 }
 
-export const paginate = (model: Model<any>) => {
-  return catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+export const paginate = <T>(model: Model<T>): ((req: Request & { result: IPaginateResult<T> }, res: Response, next: NextFunction) => Promise<void>) => {
+  return catchAsync(async (req: Request & { result: IPaginateResult<T> }, res: Response, next: NextFunction) => {
     const page = parseInt(req.query.page as string) || 1;
     const limit = parseInt(req.query.perPage as string) || 10;
 
@@ -30,7 +30,7 @@ export const paginate = (model: Model<any>) => {
     const hasPrevious = startIndex > 0 ? true : false;
     const hasNext = endIndex < (await model.countDocuments().exec()) ? true : false;
 
-    const result: IPaginateResult<any> = {
+    const result: IPaginateResult<T> = {
       data: await model.find().limit(limit).skip(startIndex),
       pagination: {
         page: page,
