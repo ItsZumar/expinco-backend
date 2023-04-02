@@ -1,11 +1,11 @@
-import { Transaction } from "../model/transaction.model";
+import { isValidObjectId } from "mongoose";
 import { NextFunction, Request, Response } from "express";
+import { Transaction } from "../model/transaction.model";
 import { AppError } from "../../../errors/error.base";
 import { HttpStatusCode } from "../../../errors/types/HttpStatusCode";
-// import { AddWalletI, DeleteWalletI, ListWalletI, UpdateWalletI } from "./response/wallet.response";
-import { isValidObjectId } from "mongoose";
+import { CreateTransactionI } from "./response/transaction.response";
 
-export const listTransactionService = async (req: Request, res: Response, next: NextFunction): Promise<ListWalletI> => {
+export const listTransactionService = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
   let page = parseInt(req.query.page as string) || 1;
   let limit = parseInt(req.query.perPage as string) || 10;
 
@@ -37,29 +37,28 @@ export const listTransactionService = async (req: Request, res: Response, next: 
   return result;
 };
 
-export const createTransactionService = async (req: Request, res: Response, next: NextFunction): Promise<AddWalletI> => {
-  const walletInDB = await Wallet.findOne({ name: req.body.name });
-
-  if (walletInDB) {
-    throw new AppError(HttpStatusCode.Conflict, "A wallet with this name already exists!");
-  } else {
-    if (!isValidObjectId(req.body.walletType)) {
-      throw new AppError(HttpStatusCode.Conflict, "Id of Wallet Type is not valid!");
-    }
-
-    const newWallet = new Wallet({
-      name: req.body.name,
-      walletType: req.body.walletType,
-      amount: req.body.amount,
-      owner: req.user._id,
-    });
-
-    let newlyCreatedwalletType = await newWallet.save();
-    return newlyCreatedwalletType;
+export const createTransactionService = async (req: Request, res: Response, next: NextFunction): Promise<CreateTransactionI> => {
+  if (!isValidObjectId(req.body.category)) {
+    throw new AppError(HttpStatusCode.NotFound, "Cateogry id is not valid!");
+  } else if (!isValidObjectId(req.body.wallet)) {
+    throw new AppError(HttpStatusCode.NotFound, "Wallet id is not valid!");
   }
+
+  let newTransaction = new Transaction({
+    type: req.body.type,
+    amount: req.body.amount,
+    category: req.body.category,
+    description: req.body.description,
+    wallet: req.body.wallet,
+    owner: req.user._id,
+    attachments: req.body.attachments,
+  });
+
+  await newTransaction.save();
+  return newTransaction;
 };
 
-export const updateTransactionService = async (req: Request, res: Response, next: NextFunction): Promise<UpdateWalletI> => {
+export const updateTransactionService = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
   // Check if the wallet ID is valid
   if (!isValidObjectId(req.params.id)) {
     throw new AppError(HttpStatusCode.NotFound, "Wallet id is not valid!");
@@ -105,7 +104,7 @@ export const updateTransactionService = async (req: Request, res: Response, next
   }
 };
 
-export const deleteTransactionService = async (req: Request, res: Response, next: NextFunction): Promise<DeleteWalletI> => {
+export const deleteTransactionService = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
   if (!isValidObjectId(req.params.id)) {
     throw new AppError(HttpStatusCode.NotFound, "Wallet id is not valid!");
   }
