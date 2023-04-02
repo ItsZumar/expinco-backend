@@ -38,6 +38,7 @@ app.use(lusca.xssProtection(true));
 app.use("/v1/user/auth", routes.user);
 app.use("/v1/user/wallet", routes.wallet);
 app.use("/v1/category", routes.transactionCategory);
+app.use("/v1/transaction", routes.transaction);
 
 app.use("/", (req, res) => {
     res.json({
