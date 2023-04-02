@@ -6,22 +6,26 @@ import { AddWalletI, DeleteWalletI, ListWalletI, UpdateWalletI } from "./respons
 import { isValidObjectId } from "mongoose";
 import { WalletType } from "../model/wallet-type.model";
 
-export const listWalletService = async (req: Request, res: Response, next: NextFunction): Promise<ListWalletI | any> => {
-  const page = parseInt(req.query.page as string) || 1;
-  const limit = parseInt(req.query.perPage as string) || 10;
+export const listWalletService = async (req: Request, res: Response, next: NextFunction): Promise<ListWalletI> => {
+  let page = parseInt(req.query.page as string) || 1;
+  let limit = parseInt(req.query.perPage as string) || 10;
 
   if (page <= 0 || limit <= 0) {
     throw new AppError(HttpStatusCode.BadRequest, "Pagination parameters must be greater than 0!");
   }
 
-  const startIndex = (page - 1) * limit;
-  const endIndex = page * limit;
-  const hasPrevious = startIndex > 0 ? true : false;
-  const hasNext = endIndex < (await Wallet.find({ owner: req.user._id }).countDocuments().exec()) ? true : false;
+  let startIndex = (page - 1) * limit;
+  let endIndex = page * limit;
+  let hasPrevious = startIndex > 0 ? true : false;
+  let hasNext = endIndex < (await Wallet.find({ owner: req.user._id }).countDocuments().exec()) ? true : false;
 
-  var walletsInDB = await Wallet.find({ owner: req.user._id }).limit(limit).skip(startIndex);
+  let walletsInDB = await Wallet.find({ owner: req.user._id })
+    .limit(limit)
+    .skip(startIndex)
+    .populate("walletType")
+    .populate("owner", ["firstname", "lastname", "email", "createdAt", "updatedAt"]);
 
-  const result = {
+  let result = {
     data: walletsInDB,
     pagination: {
       page: page,

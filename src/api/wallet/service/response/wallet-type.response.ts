@@ -1,9 +1,9 @@
-import { IPagination } from "../../../../middleware/paginate";
+import { PaginationI } from "../../../../middleware/paginate";
 import { WalletTypeDocument } from "../../model/wallet-type.model";
 
 export type ListWalletTypeI = {
   data: Array<WalletTypeDocument>;
-  pagination: IPagination;
+  pagination: PaginationI;
 };
 export type AddWalletTypeI = WalletTypeDocument & {};
 export type UpdateWalletTypeI = WalletTypeDocument & {};
