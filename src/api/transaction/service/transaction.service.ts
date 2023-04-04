@@ -3,9 +3,9 @@ import { NextFunction, Request, Response } from "express";
 import { Transaction } from "../model/transaction.model";
 import { AppError } from "../../../errors/error.base";
 import { HttpStatusCode } from "../../../errors/types/HttpStatusCode";
-import { CreateTransactionI, UpdateTransactionI } from "./response/transaction.response";
+import { CreateTransactionI, DeleteTransactionI, ListTransactionI, UpdateTransactionI } from "./response/transaction.response";
 
-export const listTransactionService = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+export const listTransactionService = async (req: Request, res: Response, next: NextFunction): Promise<ListTransactionI> => {
   let page = parseInt(req.query.page as string) || 1;
   let limit = parseInt(req.query.perPage as string) || 10;
 
@@ -116,7 +116,7 @@ export const updateTransactionService = async (req: Request, res: Response, next
   }
 };
 
-export const deleteTransactionService = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+export const deleteTransactionService = async (req: Request, res: Response, next: NextFunction): Promise<DeleteTransactionI> => {
   if (!isValidObjectId(req.params.id)) {
     throw new AppError(HttpStatusCode.NotFound, "Transaction id is not valid");
   }
