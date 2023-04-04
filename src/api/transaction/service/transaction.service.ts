@@ -3,7 +3,7 @@ import { NextFunction, Request, Response } from "express";
 import { Transaction } from "../model/transaction.model";
 import { AppError } from "../../../errors/error.base";
 import { HttpStatusCode } from "../../../errors/types/HttpStatusCode";
-import { CreateTransactionI } from "./response/transaction.response";
+import { CreateTransactionI, UpdateTransactionI } from "./response/transaction.response";
 
 export const listTransactionService = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
   let page = parseInt(req.query.page as string) || 1;
@@ -16,16 +16,25 @@ export const listTransactionService = async (req: Request, res: Response, next: 
   let startIndex = (page - 1) * limit;
   let endIndex = page * limit;
   let hasPrevious = startIndex > 0 ? true : false;
-  let hasNext = endIndex < (await Wallet.find({ owner: req.user._id }).countDocuments().exec()) ? true : false;
+  let hasNext = endIndex < (await Transaction.find({ owner: req.user._id }).countDocuments().exec()) ? true : false;
 
-  let walletsInDB = await Wallet.find({ owner: req.user._id })
+  let transactionsInDB = await Transaction.find({ owner: req.user._id })
     .limit(limit)
     .skip(startIndex)
-    .populate("walletType")
-    .populate("owner", ["firstname", "lastname", "email", "createdAt", "updatedAt"]);
+    .populate("category")
+    .populate({
+      path: "wallet",
+      select: ["_id", "amount", "name"],
+      populate: {
+        path: "walletType",
+      },
+    })
+    .populate("owner", ["firstname", "lastname", "email", "createdAt", "updatedAt"])
+    .populate("attachments")
+    .exec();
 
   let result = {
-    data: walletsInDB,
+    data: transactionsInDB,
     pagination: {
       page: page,
       perPage: limit,
@@ -38,102 +47,103 @@ export const listTransactionService = async (req: Request, res: Response, next: 
 };
 
 export const createTransactionService = async (req: Request, res: Response, next: NextFunction): Promise<CreateTransactionI> => {
-  if (!isValidObjectId(req.body.category)) {
-    throw new AppError(HttpStatusCode.NotFound, "Cateogry id is not valid!");
-  } else if (!isValidObjectId(req.body.wallet)) {
-    throw new AppError(HttpStatusCode.NotFound, "Wallet id is not valid!");
+  const { type, amount, category, description, wallet, attachments } = req.body;
+
+  if (!isValidObjectId(category)) {
+    throw new AppError(HttpStatusCode.NotFound, "Cateogry id is not valid");
+  } else if (!isValidObjectId(wallet)) {
+    throw new AppError(HttpStatusCode.NotFound, "Wallet id is not valid");
   }
 
-  req.body.attachments.map()
+  if (attachments && attachments.length) {
+    for (let attachId of attachments) {
+      if (!isValidObjectId(attachId)) {
+        throw new AppError(HttpStatusCode.BadRequest, "Attachment id is not valid");
+      }
+    }
+  }
 
   let newTransaction = new Transaction({
-    type: req.body.type,
-    amount: req.body.amount,
-    category: req.body.category,
-    description: req.body.description,
-    wallet: req.body.wallet,
+    type: type,
+    amount: amount,
+    category: category,
+    description: description,
+    wallet: wallet,
     owner: req.user._id,
-    attachments: req.body.attachments,
+    attachments: attachments || [],
   });
 
   await newTransaction.save();
   return newTransaction;
 };
 
-export const updateTransactionService = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+export const updateTransactionService = async (req: Request, res: Response, next: NextFunction): Promise<UpdateTransactionI> => {
+  const { type, amount, category, description, wallet, attachments } = req.body;
+
   // Check if the wallet ID is valid
-  if (!isValidObjectId(req.params.id)) {
-    throw new AppError(HttpStatusCode.NotFound, "Wallet id is not valid!");
+  if (category && !isValidObjectId(category)) {
+    throw new AppError(HttpStatusCode.NotFound, "Category id is not valid");
+  } else if (wallet && !isValidObjectId(wallet)) {
+    throw new AppError(HttpStatusCode.NotFound, "Wallet id is not valid");
   }
 
-  // Find the wallet by ID
-  const wallet = await Wallet.findById(req.params.id);
-
-  if (!wallet) {
-    throw new AppError(HttpStatusCode.NotFound, "A wallet doesn't exist with this id.");
+  if (attachments && attachments.length) {
+    for (let attachId of attachments) {
+      if (!isValidObjectId(attachId)) {
+        throw new AppError(HttpStatusCode.NotFound, "Attachment id is not valid");
+      }
+    }
   }
 
-  // Create ObjectIds for the creator and current user
-  const creatorId = wallet.owner;
-  const userId = req.user._id;
+  // Update the wallet in the database
+  const updatedTransaction = await Transaction.findByIdAndUpdate(
+    req.params.id,
+    {
+      type: type,
+      amount: amount,
+      category: category,
+      description: description,
+      wallet: wallet,
+      attachments: attachments || [],
+    },
+    { new: true }
+  );
 
-  // Check if the wallet exists and if the current user is the creator
-  if (!wallet || creatorId.toString() !== userId.toString()) {
-    throw new AppError(HttpStatusCode.NotFound, "A wallet doesn't exist with this id.");
+  if (updatedTransaction) {
+    return updatedTransaction;
   } else {
-    // Check if the wallet type ID is valid
-    if (!isValidObjectId(req.body.walletType)) {
-      throw new AppError(HttpStatusCode.NotFound, "Wallet type id is not valid!");
-    }
-    let walletType = await WalletType.findById({ _id: req.body.walletType });
-    if (!walletType) {
-      throw new AppError(HttpStatusCode.NotFound, "Wallet type doesn't exist with this id.");
-    }
-
-    // Update the wallet in the database
-    const updatedWallet = await Wallet.findByIdAndUpdate(
-      req.params.id,
-      {
-        name: req.body.name,
-        walletType: req.body.walletType,
-        amount: req.body.amount,
-      },
-      { new: true }
-    );
-
-    // Return the updated wallet
-    return updatedWallet;
+    throw new AppError(HttpStatusCode.NotFound, "Transaction with is this not found");
   }
 };
 
 export const deleteTransactionService = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
   if (!isValidObjectId(req.params.id)) {
-    throw new AppError(HttpStatusCode.NotFound, "Wallet id is not valid!");
+    throw new AppError(HttpStatusCode.NotFound, "Transaction id is not valid");
   }
 
-  // Find the wallet by ID
-  const wallet = await Wallet.findById(req.params.id);
+  // Find the Transaction by ID
+  const transaction = await Transaction.findById(req.params.id);
 
-  if (!wallet) {
-    throw new AppError(HttpStatusCode.NotFound, "A wallet doesn't exist with this id.");
+  if (!transaction) {
+    throw new AppError(HttpStatusCode.NotFound, "A transaction doesn't exist with this id");
   }
 
   // Create ObjectIds for the creator and current user
-  const creatorId = wallet.owner;
+  const creatorId = transaction.owner;
   const userId = req.user._id;
 
   // Check if the wallet exists and if the current user is the creator
   if (creatorId.toString() !== userId.toString()) {
-    throw new AppError(HttpStatusCode.NotFound, "A wallet doesn't exist with this id.");
+    throw new AppError(HttpStatusCode.NotFound, "A transaction doesn't exist with this id");
   }
 
-  const walletInDB = await Wallet.findByIdAndDelete({ _id: req.params.id });
+  const transactionInDB = await Transaction.findByIdAndDelete({ _id: req.params.id });
 
-  if (!walletInDB) {
-    throw new AppError(HttpStatusCode.NotFound, "A wallet not found with this id.");
+  if (!transactionInDB) {
+    throw new AppError(HttpStatusCode.NotFound, "A transaction not found with this id");
   } else {
     return {
-      status: "Your wallet has been deleted successfully!",
+      status: "Your transaction has been deleted successfully",
     };
   }
 };

@@ -4,9 +4,9 @@ import { ProtectedRoute } from "../../../middleware/auth";
 
 const router: Router = express.Router();
 
-router.get("/list-transactions", () => {});
+router.get("/list", ProtectedRoute, TransactionController.listTransaction);
 router.post("/create-transaction", ProtectedRoute, TransactionController.createTransaction);
-router.patch("/update-transaction/:id", () => {});
-router.delete("/delete-transaction/:id", () => {});
+router.patch("/update-transaction/:id", ProtectedRoute, TransactionController.updateTransaction);
+router.delete("/delete-transaction/:id", ProtectedRoute, TransactionController.deleteTransaction);
 
 export default router;

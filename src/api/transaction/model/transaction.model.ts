@@ -8,18 +8,18 @@ export type TransactionDocument = Document & {
   description: string;
   wallet: Types.ObjectId;
   owner: Types.ObjectId;
-  attachments: any;
+  attachments: Array<Types.ObjectId>;
 };
 
 const transactionSchema = new Schema<TransactionDocument>(
   {
     type: { type: String, required: true, enum: TransactionType },
     amount: { type: Number, required: true, default: 0 },
-    category: { type: Schema.Types.ObjectId, ref: "transactionCategory", required: true },
+    category: { type: Schema.Types.ObjectId, ref: "TransactionCategory", required: true },
     description: { type: String, required: true, default: null },
     wallet: { type: Schema.Types.ObjectId, ref: "Wallet", required: true },
     owner: { type: Schema.Types.ObjectId, ref: "User", required: true },
-    attachments: { type: Array<String>, required: false, default: [] },
+    attachments: { type: [Types.ObjectId], required: false, default: [] },
   },
   { timestamps: true, versionKey: false }
 );
