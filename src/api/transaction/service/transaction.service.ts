@@ -44,6 +44,8 @@ export const createTransactionService = async (req: Request, res: Response, next
     throw new AppError(HttpStatusCode.NotFound, "Wallet id is not valid!");
   }
 
+  req.body.attachments.map()
+
   let newTransaction = new Transaction({
     type: req.body.type,
     amount: req.body.amount,
