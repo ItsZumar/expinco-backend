@@ -3,6 +3,7 @@ import mongoose, { Schema, Document } from "mongoose";
 import { BCRYPT_SALT } from "../../../config/secrets";
 
 export type UserDocument = Document & {
+  displayPicture: string | null
   firstname: string;
   lastname: string;
   email: string;
@@ -15,6 +16,7 @@ export type UserDocument = Document & {
 
 const userSchema = new Schema<UserDocument>(
   {
+    displayPicture: { type: String, required: false, default: null },
     firstname: String,
     lastname: String,
     email: { type: String, unique: true, required: true, lowercase: true },

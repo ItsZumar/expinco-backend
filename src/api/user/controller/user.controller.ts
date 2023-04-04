@@ -114,6 +114,7 @@ export const updateProfile = catchAsync(
       .optional()
       .run(req);
     await check("email", "Email is not valid").isEmail().optional().run(req);
+    await check("displayPicture", "Entered displayPicture source is not valid").isString().optional().run(req);
 
     apiValidation(req, res);
     const result = await updateProfileService(req, res, next);
