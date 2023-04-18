@@ -39,6 +39,7 @@ app.use("/v1/user/auth", routes.user);
 app.use("/v1/wallet", routes.wallet);
 app.use("/v1/category", routes.transactionCategory);
 app.use("/v1/transaction", routes.transaction);
+app.use("/v1/homepage", routes.homepage);
 
 app.use("/", (req, res) => {
     res.json({

@@ -29,8 +29,9 @@ export const listTransactionService = async (req: Request, res: Response, next: 
         path: "walletType",
       },
     })
-    .populate("owner", ["firstname", "lastname", "email", "createdAt", "updatedAt"])
+    // .populate("owner", ["firstname", "lastname", "email", "createdAt", "updatedAt"])
     .populate("attachments")
+    .select(["-owner"])
     .exec();
 
   let result = {

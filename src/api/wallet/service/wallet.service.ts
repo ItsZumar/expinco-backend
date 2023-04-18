@@ -23,7 +23,8 @@ export const listWalletService = async (req: Request, res: Response, next: NextF
     .limit(limit)
     .skip(startIndex)
     .populate("walletType")
-    .populate("owner", ["firstname", "lastname", "email", "createdAt", "updatedAt"]);
+    .select(['-owner'])
+    // .populate("owner", ["firstname", "lastname", "email", "createdAt", "updatedAt"]);
 
   let result = {
     data: walletsInDB,
