@@ -1,5 +1,4 @@
 import { NextFunction, Request, Response } from "express";
-import { check } from "express-validator";
 import { apiOk, apiValidation, catchAsync } from "../../../util/apiHelpers";
 import { homepageService } from "../service/homepage.service";
 

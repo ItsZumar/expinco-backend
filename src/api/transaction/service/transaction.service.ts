@@ -19,6 +19,7 @@ export const listTransactionService = async (req: Request, res: Response, next: 
   let hasNext = endIndex < (await Transaction.find({ owner: req.user._id }).countDocuments().exec()) ? true : false;
 
   let transactionsInDB = await Transaction.find({ owner: req.user._id })
+    .sort("-createdAt")
     .limit(limit)
     .skip(startIndex)
     .populate("category")
@@ -29,7 +30,6 @@ export const listTransactionService = async (req: Request, res: Response, next: 
         path: "walletType",
       },
     })
-    // .populate("owner", ["firstname", "lastname", "email", "createdAt", "updatedAt"])
     .populate("attachments")
     .select(["-owner"])
     .exec();
