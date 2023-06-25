@@ -4,10 +4,10 @@ import { Wallet } from "../../wallet/model/wallet.model";
 import { HomepageI } from "./response/homepage.response";
 
 export const homepageService = async (req: Request, res: Response, next: NextFunction): Promise<HomepageI> => {
-  let userWallets = await Wallet.find({ owner: req.user._id });
-  let availableBalance = userWallets.map((wal) => wal.amount).reduce((prev, curr) => prev + curr);
+  const userWallets = await Wallet.find({ owner: req.user._id });
+  const availableBalance = userWallets.map((wal) => wal.amount).reduce((prev, curr) => prev + curr);
 
-  let result = await Transaction.aggregate([
+  const result = await Transaction.aggregate([
     {
       $match: {
         owner: req.user._id,
@@ -41,7 +41,7 @@ export const homepageService = async (req: Request, res: Response, next: NextFun
         availableBalance: availableBalance,
       },
     },
-  ]).exec().then(response => {response[0]._id = undefined; return response[0]});
+  ]).exec().then(response => {response[0]._id = undefined; return response[0];});
 
   return result;
 };

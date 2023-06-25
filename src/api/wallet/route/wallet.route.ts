@@ -1,5 +1,5 @@
 import express, { Router } from "express";
-import { ProtectedRoute } from '../../../middleware/auth'
+import { ProtectedRoute } from "../../../middleware/auth";
 import * as WalletController from "../controller/wallet.controller";
 import * as WalletTypeController from "../controller/wallet-type.controller";
 

@@ -1,5 +1,5 @@
 import express, { Router } from "express";
-import * as TransactionController from '../controller/transaction.controller'
+import * as TransactionController from "../controller/transaction.controller";
 import { ProtectedRoute } from "../../../middleware/auth";
 
 const router: Router = express.Router();

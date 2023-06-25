@@ -6,19 +6,19 @@ import { HttpStatusCode } from "../../../errors/types/HttpStatusCode";
 import { CreateTransactionI, DeleteTransactionI, ListTransactionI, UpdateTransactionI } from "./response/transaction.response";
 
 export const listTransactionService = async (req: Request, res: Response, next: NextFunction): Promise<ListTransactionI> => {
-  let page = parseInt(req.query.page as string) || 1;
-  let limit = parseInt(req.query.perPage as string) || 10;
+  const page = parseInt(req.query.page as string) || 1;
+  const limit = parseInt(req.query.perPage as string) || 10;
 
   if (page <= 0 || limit <= 0) {
     throw new AppError(HttpStatusCode.BadRequest, "Pagination parameters must be greater than 0!");
   }
 
-  let startIndex = (page - 1) * limit;
-  let endIndex = page * limit;
-  let hasPrevious = startIndex > 0 ? true : false;
-  let hasNext = endIndex < (await Transaction.find({ owner: req.user._id }).countDocuments().exec()) ? true : false;
+  const startIndex = (page - 1) * limit;
+  const endIndex = page * limit;
+  const hasPrevious = startIndex > 0 ? true : false;
+  const hasNext = endIndex < (await Transaction.find({ owner: req.user._id }).countDocuments().exec()) ? true : false;
 
-  let transactionsInDB = await Transaction.find({ owner: req.user._id })
+  const transactionsInDB = await Transaction.find({ owner: req.user._id })
     .sort("-createdAt")
     .limit(limit)
     .skip(startIndex)
@@ -34,7 +34,7 @@ export const listTransactionService = async (req: Request, res: Response, next: 
     .select(["-owner"])
     .exec();
 
-  let result = {
+  const result = {
     data: transactionsInDB,
     pagination: {
       page: page,
@@ -57,14 +57,14 @@ export const createTransactionService = async (req: Request, res: Response, next
   }
 
   if (attachments && attachments.length) {
-    for (let attachId of attachments) {
+    for (const attachId of attachments) {
       if (!isValidObjectId(attachId)) {
         throw new AppError(HttpStatusCode.BadRequest, "Attachment id is not valid");
       }
     }
   }
 
-  let newTransaction = new Transaction({
+  const newTransaction = new Transaction({
     type: type,
     amount: amount,
     category: category,
@@ -89,7 +89,7 @@ export const updateTransactionService = async (req: Request, res: Response, next
   }
 
   if (attachments && attachments.length) {
-    for (let attachId of attachments) {
+    for (const attachId of attachments) {
       if (!isValidObjectId(attachId)) {
         throw new AppError(HttpStatusCode.NotFound, "Attachment id is not valid");
       }

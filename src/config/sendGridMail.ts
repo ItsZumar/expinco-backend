@@ -1,4 +1,4 @@
-const sgMail = require('@sendgrid/mail');
+const sgMail = require("@sendgrid/mail");
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
@@ -23,10 +23,10 @@ export const sendEmailNotification = async ({ to, subject, textMessage }: Messag
         console.error(error);
 
         if (error.response) {
-            console.error(error.response.body)
+            console.error(error.response.body);
         }
     }
-}
+};
 
 // import nodemailer from 'nodemailer'
 

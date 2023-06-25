@@ -44,7 +44,7 @@ userSchema.pre("save", async function (next) {
  * Password comparison method.
  */
 userSchema.methods.comparePassword = async function (password: string) {
-  let isMatch = await bcrypt.compare(password, this.password);
+  const isMatch = await bcrypt.compare(password, this.password);
   return { isMatch };
 };
 

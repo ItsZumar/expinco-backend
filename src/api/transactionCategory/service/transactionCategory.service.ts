@@ -6,21 +6,21 @@ import { TransactionCategory } from "../model/transactionCategory.model";
 import { ListCategoryI, CreateCategoryI, DeleteCategoryI, UpdateCategoryI } from "./response/transactionCategory.response";
 
 export const listCategoryService = async (req: Request, res: Response, next: NextFunction): Promise<ListCategoryI> => {
-  let page = parseInt(req.query.page as string) || 1;
-  let limit = parseInt(req.query.perPage as string) || 10;
+  const page = parseInt(req.query.page as string) || 1;
+  const limit = parseInt(req.query.perPage as string) || 10;
 
   if (page <= 0 || limit <= 0) {
     throw new AppError(HttpStatusCode.BadRequest, "Pagination parameters must be greater than 0!");
   }
 
-  let startIndex = (page - 1) * limit;
-  let endIndex = page * limit;
-  let hasPrevious = startIndex > 0 ? true : false;
-  let hasNext = endIndex < (await TransactionCategory.find().countDocuments().exec()) ? true : false;
+  const startIndex = (page - 1) * limit;
+  const endIndex = page * limit;
+  const hasPrevious = startIndex > 0 ? true : false;
+  const hasNext = endIndex < (await TransactionCategory.find().countDocuments().exec()) ? true : false;
   
-  let categoriesInDB = await TransactionCategory.find().limit(limit).skip(startIndex);
+  const categoriesInDB = await TransactionCategory.find().limit(limit).skip(startIndex);
 
-  let result = {
+  const result = {
     data: categoriesInDB,
     pagination: {
       page: page,

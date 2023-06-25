@@ -5,17 +5,17 @@ import { AppError } from "../../../errors/error.base";
 import { HttpStatusCode } from "../../../errors/types/HttpStatusCode";
 
 export const spendFrequencyService = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
-  let { orderBy } = req.query;
+  const { orderBy } = req.query;
 
-  let validOrderByKeys = ["today", "week", "month", "year"];
+  const validOrderByKeys = ["today", "week", "month", "year"];
   
-  let isOrderByValid = validOrderByKeys.includes(String(orderBy));
+  const isOrderByValid = validOrderByKeys.includes(String(orderBy));
 
   if (!isOrderByValid) {
     throw new AppError(HttpStatusCode.BadRequest, "OrderBy value is not valid!");
   }
 
-  let result = {};
+  const result = {};
 
   return result;
 };

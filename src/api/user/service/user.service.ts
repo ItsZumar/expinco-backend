@@ -32,7 +32,7 @@ export const emailSignupService = async (req: Request, res: Response, next: Next
   const token = await signJWT(user._id);
 
   // Getting authCode by generating random digits
-  let authCode = await generateRandomDigits(6);
+  const authCode = await generateRandomDigits(6);
 
   // Saving user object with authCode to match later during email verification process
   user.authCode = authCode + "";
@@ -60,8 +60,8 @@ export const emailSigninService = async (req: Request, res: Response, next: Next
   if (!user) {
     throw new AppError(HttpStatusCode.BadRequest, "Either email or password is invalid");
   } else {
-    let { isMatch } = await user.comparePassword(req.body.password);
-    let token = await signJWT(user._id);
+    const { isMatch } = await user.comparePassword(req.body.password);
+    const token = await signJWT(user._id);
 
     if (isMatch) {
       user.password = undefined;
@@ -80,7 +80,7 @@ export const forgotPasswordService = async (req: Request, res: Response, next: N
     throw new AppError(HttpStatusCode.BadRequest, "User doesn't exists with this email");
   } else {
     // Getting authCode by generating random digits
-    let authCode = await generateRandomDigits(6);
+    const authCode = await generateRandomDigits(6);
 
     // Saving user object with authCode to match later during email verification process
     user.authCode = String(authCode);
@@ -105,7 +105,7 @@ export const changePasswordService = async (req: Request, res: Response, next: N
   if (!user) {
     throw new AppError(HttpStatusCode.BadRequest, "User doesn't exists with this email");
   } else {
-    let { isMatch } = await user.comparePassword(req.body.oldPassword);
+    const { isMatch } = await user.comparePassword(req.body.oldPassword);
 
     if (!isMatch) {
       throw new AppError(HttpStatusCode.NotAcceptable, "Your old password is wrong.");
@@ -152,7 +152,7 @@ export const resendVerifyEmailService = async (req: Request, res: Response, next
     }
 
     // Getting authCode by generating random digits
-    let authCode = await generateRandomDigits(6);
+    const authCode = await generateRandomDigits(6);
 
     // Saving user object with authCode to match later during email verification process
     user.authCode = authCode + "";

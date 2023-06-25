@@ -44,8 +44,8 @@ app.use("/v1/analytics", routes.analytics);
 
 app.use("/", (req, res) => {
     res.json({
-        status: "LIVE FROM EXPINCO"
-    })
+        status: "LIVE FROM EXPINCO SERVER!!"
+    });
 });
 
 // Handling 404 and  Global errors here

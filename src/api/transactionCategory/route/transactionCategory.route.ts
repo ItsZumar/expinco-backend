@@ -3,9 +3,9 @@ import * as TransactionCategory from "../controller/transactionCategory.controll
 
 const router: Router = express.Router();
 
-router.get("/list", TransactionCategory.listCategory)
-router.post("/create", TransactionCategory.createCategory)
-router.patch("/update/:id", TransactionCategory.updateCategory)
-router.delete("/delete/:id", TransactionCategory.deleteCategory)
+router.get("/list", TransactionCategory.listCategory);
+router.post("/create", TransactionCategory.createCategory);
+router.patch("/update/:id", TransactionCategory.updateCategory);
+router.delete("/delete/:id", TransactionCategory.deleteCategory);
 
 export default router;

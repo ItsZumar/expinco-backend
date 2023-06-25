@@ -7,20 +7,20 @@ import { User } from "../api/user/model/user.model";
 
 export const ProtectedRoute = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     let token;
-    let reqHeaderAuth = req.headers.authorization;
+    const reqHeaderAuth = req.headers.authorization;
 
-    if (reqHeaderAuth && reqHeaderAuth.startsWith('Bearer')) {
-        token = reqHeaderAuth.split(' ')[1];
+    if (reqHeaderAuth && reqHeaderAuth.startsWith("Bearer")) {
+        token = reqHeaderAuth.split(" ")[1];
     }
     if (!token) {
         throw new AppError(HttpStatusCode.Unauthorized, "You are not logged in! Please login to access this!");
     }
 
     // 2) Verification token
-    const decodedUser = await decodeJWT(token)
+    const decodedUser = await decodeJWT(token);
 
     // 3) Check if user still exists (if deleted from DB or not)
-    const currentUser = await User.findById(decodedUser)
+    const currentUser = await User.findById(decodedUser);
     if (!currentUser) {
         throw new AppError(HttpStatusCode.Unauthorized, "The user belonging to the token no longer exists.");
     }

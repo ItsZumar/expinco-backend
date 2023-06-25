@@ -7,26 +7,26 @@ import { isValidObjectId } from "mongoose";
 import { WalletType } from "../model/wallet-type.model";
 
 export const listWalletService = async (req: Request, res: Response, next: NextFunction): Promise<ListWalletI> => {
-  let page = parseInt(req.query.page as string) || 1;
-  let limit = parseInt(req.query.perPage as string) || 10;
+  const page = parseInt(req.query.page as string) || 1;
+  const limit = parseInt(req.query.perPage as string) || 10;
 
   if (page <= 0 || limit <= 0) {
     throw new AppError(HttpStatusCode.BadRequest, "Pagination parameters must be greater than 0!");
   }
 
-  let startIndex = (page - 1) * limit;
-  let endIndex = page * limit;
-  let hasPrevious = startIndex > 0 ? true : false;
-  let hasNext = endIndex < (await Wallet.find({ owner: req.user._id }).countDocuments().exec()) ? true : false;
+  const startIndex = (page - 1) * limit;
+  const endIndex = page * limit;
+  const hasPrevious = startIndex > 0 ? true : false;
+  const hasNext = endIndex < (await Wallet.find({ owner: req.user._id }).countDocuments().exec()) ? true : false;
 
-  let walletsInDB = await Wallet.find({ owner: req.user._id })
+  const walletsInDB = await Wallet.find({ owner: req.user._id })
     .limit(limit)
     .skip(startIndex)
     .populate("walletType")
-    .select(['-owner'])
+    .select(["-owner"]);
     // .populate("owner", ["firstname", "lastname", "email", "createdAt", "updatedAt"]);
 
-  let result = {
+  const result = {
     data: walletsInDB,
     pagination: {
       page: page,
@@ -56,7 +56,7 @@ export const addWalletService = async (req: Request, res: Response, next: NextFu
       owner: req.user._id,
     });
 
-    let newlyCreatedwalletType = await newWallet.save();
+    const newlyCreatedwalletType = await newWallet.save();
     return newlyCreatedwalletType;
   }
 };
@@ -86,7 +86,7 @@ export const updateWalletService = async (req: Request, res: Response, next: Nex
     if (!isValidObjectId(req.body.walletType)) {
       throw new AppError(HttpStatusCode.NotFound, "Wallet type id is not valid!");
     }
-    let walletType = await WalletType.findById({ _id: req.body.walletType });
+    const walletType = await WalletType.findById({ _id: req.body.walletType });
     if (!walletType) {
       throw new AppError(HttpStatusCode.NotFound, "Wallet type doesn't exist with this id.");
     }
