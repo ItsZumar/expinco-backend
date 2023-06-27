@@ -4,6 +4,8 @@ import { Transaction } from "../model/transaction.model";
 import { AppError } from "../../../errors/error.base";
 import { HttpStatusCode } from "../../../errors/types/HttpStatusCode";
 import { CreateTransactionI, DeleteTransactionI, ListTransactionI, UpdateTransactionI } from "./response/transaction.response";
+import { Wallet } from "../../wallet/model/wallet.model";
+import { WalletDocument } from "../../wallet/model/wallet.model";
 
 export const listTransactionService = async (req: Request, res: Response, next: NextFunction): Promise<ListTransactionI> => {
   const page = parseInt(req.query.page as string) || 1;
@@ -26,9 +28,9 @@ export const listTransactionService = async (req: Request, res: Response, next: 
     .populate({
       path: "wallet",
       select: ["_id", "amount", "name"],
-      populate: {
-        path: "walletType",
-      },
+      // populate: {
+      //   path: "walletType",
+      // },
     })
     .populate("attachments")
     .select(["-owner"])
@@ -49,6 +51,26 @@ export const listTransactionService = async (req: Request, res: Response, next: 
 
 export const createTransactionService = async (req: Request, res: Response, next: NextFunction): Promise<CreateTransactionI> => {
   const { type, amount, category, description, wallet, attachments } = req.body;
+
+  //changes
+  // const userWallets = await Wallet.find({ owner: req.user._id });
+  // const availableBalance = userWallets.map((wal: WalletDocument) => wal.amount).reduce((prev: any, curr: any) => prev + curr);
+
+  const walletById = await Wallet.findById({ _id: wallet });
+
+  //*
+
+  //CHANGES
+  if (type === "EXPENSE") {
+    walletById.amount = walletById.amount - amount;
+    walletById.save();
+    console.log(walletById);
+  } else if (type === "INCOME") {
+    walletById.amount = walletById.amount + amount;
+    walletById.save();
+  }
+
+  //*
 
   if (!isValidObjectId(category)) {
     throw new AppError(HttpStatusCode.NotFound, "Cateogry id is not valid");

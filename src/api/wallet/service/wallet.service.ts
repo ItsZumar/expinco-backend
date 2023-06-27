@@ -4,7 +4,7 @@ import { AppError } from "../../../errors/error.base";
 import { HttpStatusCode } from "../../../errors/types/HttpStatusCode";
 import { AddWalletI, DeleteWalletI, ListWalletI, UpdateWalletI } from "./response/wallet.response";
 import { isValidObjectId } from "mongoose";
-import { WalletType } from "../model/wallet-type.model";
+// import { WalletType } from "../model/wallet-type.model";
 
 export const listWalletService = async (req: Request, res: Response, next: NextFunction): Promise<ListWalletI> => {
   const page = parseInt(req.query.page as string) || 1;
@@ -19,12 +19,8 @@ export const listWalletService = async (req: Request, res: Response, next: NextF
   const hasPrevious = startIndex > 0 ? true : false;
   const hasNext = endIndex < (await Wallet.find({ owner: req.user._id }).countDocuments().exec()) ? true : false;
 
-  const walletsInDB = await Wallet.find({ owner: req.user._id })
-    .limit(limit)
-    .skip(startIndex)
-    .populate("walletType")
-    .select(["-owner"]);
-    // .populate("owner", ["firstname", "lastname", "email", "createdAt", "updatedAt"]);
+  const walletsInDB = await Wallet.find({ owner: req.user._id }).limit(limit).skip(startIndex).select(["-owner"]);
+  // .populate("owner", ["firstname", "lastname", "email", "createdAt", "updatedAt"]);
 
   const result = {
     data: walletsInDB,
@@ -51,7 +47,7 @@ export const addWalletService = async (req: Request, res: Response, next: NextFu
 
     const newWallet = new Wallet({
       name: req.body.name,
-      walletType: req.body.walletType,
+      // walletType: req.body.walletType,
       amount: req.body.amount,
       owner: req.user._id,
     });
@@ -86,17 +82,17 @@ export const updateWalletService = async (req: Request, res: Response, next: Nex
     if (!isValidObjectId(req.body.walletType)) {
       throw new AppError(HttpStatusCode.NotFound, "Wallet type id is not valid!");
     }
-    const walletType = await WalletType.findById({ _id: req.body.walletType });
-    if (!walletType) {
-      throw new AppError(HttpStatusCode.NotFound, "Wallet type doesn't exist with this id.");
-    }
+    // const walletType = await WalletType.findById({ _id: req.body.walletType });
+    // if (!walletType) {
+    //   throw new AppError(HttpStatusCode.NotFound, "Wallet type doesn't exist with this id.");
+    // }
 
     // Update the wallet in the database
     const updatedWallet = await Wallet.findByIdAndUpdate(
       req.params.id,
       {
         name: req.body.name,
-        walletType: req.body.walletType,
+        // walletType: req.body.walletType,
         amount: req.body.amount,
       },
       { new: true }

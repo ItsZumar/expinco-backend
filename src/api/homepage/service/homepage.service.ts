@@ -41,7 +41,12 @@ export const homepageService = async (req: Request, res: Response, next: NextFun
         availableBalance: availableBalance,
       },
     },
-  ]).exec().then(response => {response[0]._id = undefined; return response[0];});
+  ])
+    .exec()
+    .then((response) => {
+      response[0]._id = undefined;
+      return response[0];
+    });
 
   return result;
 };
