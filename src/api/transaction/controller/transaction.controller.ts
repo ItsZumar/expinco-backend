@@ -4,6 +4,7 @@ import { apiOk, apiValidation, catchAsync } from "../../../util/apiHelpers";
 import {
   createTransactionService,
   deleteTransactionService,
+  getTransactionsByTypeService,
   listTransactionService,
   updateTransactionService,
 } from "../service/transaction.service";
@@ -43,5 +44,11 @@ export const updateTransaction = catchAsync(async (req: Request, res: Response, 
 export const deleteTransaction = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
   apiValidation(req, res);
   const result = await deleteTransactionService(req, res, next);
+  apiOk(res, result);
+});
+
+export const getTransactionsByType = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+  apiValidation(req, res);
+  const result = await getTransactionsByTypeService(req, res, next);
   apiOk(res, result);
 });

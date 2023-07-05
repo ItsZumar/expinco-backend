@@ -9,6 +9,8 @@ export type TransactionDocument = Document & {
   wallet: Types.ObjectId;
   owner: Types.ObjectId;
   attachments: Array<Types.ObjectId>;
+  //changed
+  createdAt: Date;
 };
 
 const transactionSchema = new Schema<TransactionDocument>(
