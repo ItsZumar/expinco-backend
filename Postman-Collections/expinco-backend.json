@@ -43,7 +43,7 @@
 					"response": []
 				},
 				{
-					"name": "New Request",
+					"name": "Financial Report",
 					"id": "ecd1c3e1-1c08-4068-bf05-0d807fc42eb8",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
