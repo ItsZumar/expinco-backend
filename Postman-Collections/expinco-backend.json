@@ -59,7 +59,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"startingDate\": \"2023-06-28T13:01:55.252Z\",\n    \"endingDate\": \"2023-07-07T13:01:55.252Z\"\n}",
+							"raw": "{\n    \"startingDate\": \"2023-06-01T13:01:55.252Z\",\n    \"endingDate\": \"2023-07-07T13:01:55.252Z\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
