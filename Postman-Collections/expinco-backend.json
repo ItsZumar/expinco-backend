@@ -67,7 +67,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseURL}}{{apiVersion}}/analytics/financial-report?type=EXPENSE&page=2&perPage=2",
+							"raw": "{{baseURL}}{{apiVersion}}/analytics/financial-report?type=EXPENSE&page=1&perPage=2",
 							"host": [
 								"{{baseURL}}{{apiVersion}}"
 							],
@@ -82,7 +82,7 @@
 								},
 								{
 									"key": "page",
-									"value": "2"
+									"value": "1"
 								},
 								{
 									"key": "perPage",
