@@ -67,7 +67,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseURL}}{{apiVersion}}/analytics/financial-report?type=INCOME&page=2&perPage=2",
+							"raw": "{{baseURL}}{{apiVersion}}/analytics/financial-report?type=EXPENSE&page=2&perPage=2",
 							"host": [
 								"{{baseURL}}{{apiVersion}}"
 							],
@@ -78,7 +78,7 @@
 							"query": [
 								{
 									"key": "type",
-									"value": "INCOME"
+									"value": "EXPENSE"
 								},
 								{
 									"key": "page",
