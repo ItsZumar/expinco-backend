@@ -62,29 +62,3 @@ export const homepageService = async (req: Request, res: Response, next: NextFun
 
   return result;
 };
-
-// $group: {
-//   _id: "$owner",
-//   totalIncome: {
-//     $sum: {
-//       $cond: [
-//         {
-//           $and: [{ $eq: ["$type", "INCOME"] }, { $eq: ["$createdAt", month] }],
-//         },
-//         "$amount",
-//         0,
-//       ],
-//     },
-//   },
-//   totalExpense: {
-//     $sum: {
-//       $cond: [
-//         {
-//           $and: [{ $eq: ["$type", "EXPENSE"] }, { $eq: ["$createdAt", month] }],
-//         },
-//         "$amount",
-//         0,
-//       ],
-//     },
-//   },
-// },
