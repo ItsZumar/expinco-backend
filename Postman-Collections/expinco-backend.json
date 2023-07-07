@@ -57,6 +57,15 @@
 						},
 						"method": "GET",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"startingDate\": \"\",\n    \"endingDate\": \"\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": "{{baseURL}}{{apiVersion}}/analytics/financial-report"
 					},
 					"response": []
