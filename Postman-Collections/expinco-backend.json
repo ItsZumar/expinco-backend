@@ -50,7 +50,8 @@
 					},
 					"request": {
 						"method": "GET",
-						"header": []
+						"header": [],
+						"url": "{{baseURL}}{{apiVersion}}/analytics/financial-report"
 					},
 					"response": []
 				}
