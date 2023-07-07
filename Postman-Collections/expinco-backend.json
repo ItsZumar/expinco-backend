@@ -66,7 +66,23 @@
 								}
 							}
 						},
-						"url": "{{baseURL}}{{apiVersion}}/analytics/financial-report"
+						"url": {
+							"raw": "{{baseURL}}{{apiVersion}}/analytics/financial-report?type=INCOME",
+							"host": [
+								"{{baseURL}}{{apiVersion}}"
+							],
+							"path": [
+								"analytics",
+								"financial-report"
+							],
+							"query": [
+								{
+									"key": "type",
+									"value": "INCOME",
+									"type": "text"
+								}
+							]
+						}
 					},
 					"response": []
 				}
