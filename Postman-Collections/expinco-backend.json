@@ -10,7 +10,7 @@
 			"item": [
 				{
 					"name": "List Spend frequency",
-					"_postman_id": "0e0d31cb-dac2-49b3-b780-fef9c66722f4",
+					"id": "0e0d31cb-dac2-49b3-b780-fef9c66722f4",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
@@ -41,16 +41,28 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "New Request",
+					"id": "ecd1c3e1-1c08-4068-bf05-0d807fc42eb8",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
 				}
 			],
-			"_postman_id": "0cd0b5c0-9a4e-4b9d-9560-941a86d475ad"
+			"id": "0cd0b5c0-9a4e-4b9d-9560-941a86d475ad"
 		},
 		{
 			"name": "Homepage",
 			"item": [
 				{
 					"name": "Get Inc. / Exp. stats",
-					"_postman_id": "cdb8957c-1ff3-48e7-b9fb-dc3359a933d7",
+					"id": "cdb8957c-1ff3-48e7-b9fb-dc3359a933d7",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
@@ -77,7 +89,7 @@
 					"response": []
 				}
 			],
-			"_postman_id": "2da045f3-7888-442e-85ca-ae1b92826746"
+			"id": "2da045f3-7888-442e-85ca-ae1b92826746"
 		},
 		{
 			"name": "User",
@@ -87,7 +99,7 @@
 					"item": [
 						{
 							"name": "Resend Email Verification",
-							"_postman_id": "f1b14e41-9c99-4dac-8c7c-1f03a17ba237",
+							"id": "f1b14e41-9c99-4dac-8c7c-1f03a17ba237",
 							"protocolProfileBehavior": {
 								"disableBodyPruning": true
 							},
@@ -109,7 +121,7 @@
 						},
 						{
 							"name": "Email Signup",
-							"_postman_id": "761eef27-237e-4989-8526-3b21c82cdaa4",
+							"id": "761eef27-237e-4989-8526-3b21c82cdaa4",
 							"protocolProfileBehavior": {
 								"disableBodyPruning": true
 							},
@@ -131,7 +143,7 @@
 						},
 						{
 							"name": "Email Verification",
-							"_postman_id": "7290e3ae-40ba-49f2-979e-70f987225338",
+							"id": "7290e3ae-40ba-49f2-979e-70f987225338",
 							"protocolProfileBehavior": {
 								"disableBodyPruning": true
 							},
@@ -169,7 +181,7 @@
 									}
 								}
 							],
-							"_postman_id": "ff08234c-4a2f-43aa-9a1b-546985373f50",
+							"id": "ff08234c-4a2f-43aa-9a1b-546985373f50",
 							"protocolProfileBehavior": {
 								"disableBodyPruning": true
 							},
@@ -191,7 +203,7 @@
 						},
 						{
 							"name": "Change Password",
-							"_postman_id": "3bb15191-c8f2-4376-9c1a-3f77a4644393",
+							"id": "3bb15191-c8f2-4376-9c1a-3f77a4644393",
 							"protocolProfileBehavior": {
 								"disableBodyPruning": true
 							},
@@ -219,7 +231,7 @@
 						},
 						{
 							"name": "Forgot Password",
-							"_postman_id": "0a3149d2-98b8-435f-8c71-7bdf30adcfe8",
+							"id": "0a3149d2-98b8-435f-8c71-7bdf30adcfe8",
 							"protocolProfileBehavior": {
 								"disableBodyPruning": true
 							},
@@ -241,7 +253,7 @@
 						},
 						{
 							"name": "Reset Password",
-							"_postman_id": "97462af6-39ec-4f0d-8a2b-34c7c50865f5",
+							"id": "97462af6-39ec-4f0d-8a2b-34c7c50865f5",
 							"protocolProfileBehavior": {
 								"disableBodyPruning": true
 							},
@@ -262,15 +274,14 @@
 							"response": []
 						}
 					],
-					"_postman_id": "b2c38bbf-6069-42da-b7b9-6aa980add18b",
-					"_postman_isSubFolder": true
+					"id": "b2c38bbf-6069-42da-b7b9-6aa980add18b"
 				},
 				{
 					"name": "Profile",
 					"item": [
 						{
 							"name": "Get Profile",
-							"_postman_id": "21172e1b-b7ea-4a38-b26e-6ac303163ace",
+							"id": "21172e1b-b7ea-4a38-b26e-6ac303163ace",
 							"protocolProfileBehavior": {
 								"disableBodyPruning": true
 							},
@@ -289,7 +300,7 @@
 						},
 						{
 							"name": "Update Profile",
-							"_postman_id": "291bf2a7-8721-40ed-b976-22efdc92660f",
+							"id": "291bf2a7-8721-40ed-b976-22efdc92660f",
 							"protocolProfileBehavior": {
 								"disableBodyPruning": true
 							},
@@ -316,11 +327,10 @@
 							"response": []
 						}
 					],
-					"_postman_id": "353749f4-e80c-48f9-8e78-efa703627eee",
-					"_postman_isSubFolder": true
+					"id": "353749f4-e80c-48f9-8e78-efa703627eee"
 				}
 			],
-			"_postman_id": "08a08904-fae2-4e06-ba61-664aa96c71ce"
+			"id": "08a08904-fae2-4e06-ba61-664aa96c71ce"
 		},
 		{
 			"name": "Wallet",
@@ -330,7 +340,7 @@
 					"item": [
 						{
 							"name": "Get All Wallet Types",
-							"_postman_id": "95390ee9-b5a9-4dac-bb61-974af94a033b",
+							"id": "95390ee9-b5a9-4dac-bb61-974af94a033b",
 							"protocolProfileBehavior": {
 								"disableBodyPruning": true
 							},
@@ -362,7 +372,7 @@
 						},
 						{
 							"name": "Add Wallet Type",
-							"_postman_id": "33b68119-6d5a-4ffc-805a-fb3bd08bd565",
+							"id": "33b68119-6d5a-4ffc-805a-fb3bd08bd565",
 							"protocolProfileBehavior": {
 								"disableBodyPruning": true
 							},
@@ -390,7 +400,7 @@
 						},
 						{
 							"name": "Update Wallet Type",
-							"_postman_id": "515c0280-0e61-45f9-b194-26dbabb84575",
+							"id": "515c0280-0e61-45f9-b194-26dbabb84575",
 							"protocolProfileBehavior": {
 								"disableBodyPruning": true
 							},
@@ -418,7 +428,7 @@
 						},
 						{
 							"name": "Delete Wallet Type",
-							"_postman_id": "8aaa855f-91be-473f-9706-8cb58735f0a5",
+							"id": "8aaa855f-91be-473f-9706-8cb58735f0a5",
 							"protocolProfileBehavior": {
 								"disableBodyPruning": true
 							},
@@ -436,12 +446,11 @@
 							"response": []
 						}
 					],
-					"_postman_id": "1d9e1072-0fd5-46c4-b458-b7f054ea645d",
-					"_postman_isSubFolder": true
+					"id": "1d9e1072-0fd5-46c4-b458-b7f054ea645d"
 				},
 				{
 					"name": "Get All Wallets",
-					"_postman_id": "0f171b57-0bcd-4fa1-aae5-01e1d3560f33",
+					"id": "0f171b57-0bcd-4fa1-aae5-01e1d3560f33",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
@@ -479,7 +488,7 @@
 				},
 				{
 					"name": "Add Wallet",
-					"_postman_id": "bce91f7a-04c5-4a50-b9cb-d93020f7160a",
+					"id": "bce91f7a-04c5-4a50-b9cb-d93020f7160a",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
@@ -507,7 +516,7 @@
 				},
 				{
 					"name": "Update Wallet",
-					"_postman_id": "2d5c05f3-040e-45e6-b849-a86063a2166f",
+					"id": "2d5c05f3-040e-45e6-b849-a86063a2166f",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
@@ -535,7 +544,7 @@
 				},
 				{
 					"name": "Delete Wallet",
-					"_postman_id": "e9ef9a29-bd8b-44b8-af34-98aa966c6d80",
+					"id": "e9ef9a29-bd8b-44b8-af34-98aa966c6d80",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
@@ -553,14 +562,14 @@
 					"response": []
 				}
 			],
-			"_postman_id": "f2485bf8-632b-4f4d-93a9-83043d30f51c"
+			"id": "f2485bf8-632b-4f4d-93a9-83043d30f51c"
 		},
 		{
 			"name": "Transaction",
 			"item": [
 				{
 					"name": "List Transactions",
-					"_postman_id": "c28564af-3f5a-4800-ac5c-61676a4b5589",
+					"id": "c28564af-3f5a-4800-ac5c-61676a4b5589",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
@@ -575,10 +584,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "",
-							"options": {
-								"raw": {}
-							}
+							"raw": ""
 						},
 						"url": {
 							"raw": "{{baseURL}}{{apiVersion}}/transaction/list?type=INCOME&sortTransactionBy=NEWEST&page=1&perPage=10&category=6499bcc2bdeb19285d6d92a7",
@@ -617,7 +623,7 @@
 				},
 				{
 					"name": "Create Transaction",
-					"_postman_id": "efd7e7a1-17d0-41b0-a87b-bfae66aea81d",
+					"id": "efd7e7a1-17d0-41b0-a87b-bfae66aea81d",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
@@ -645,7 +651,7 @@
 				},
 				{
 					"name": "Update Transaction",
-					"_postman_id": "35225f7e-b5d2-48c7-975c-934546bbd6af",
+					"id": "35225f7e-b5d2-48c7-975c-934546bbd6af",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
@@ -673,7 +679,7 @@
 				},
 				{
 					"name": "Delete Transaction",
-					"_postman_id": "fbbca6a8-d68f-4ede-aef4-4ad40461a5d2",
+					"id": "fbbca6a8-d68f-4ede-aef4-4ad40461a5d2",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
@@ -701,7 +707,7 @@
 				},
 				{
 					"name": "List Transactions By Type",
-					"_postman_id": "1a9e4f04-9835-4052-aea3-bb8459a940b9",
+					"id": "1a9e4f04-9835-4052-aea3-bb8459a940b9",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
@@ -739,14 +745,14 @@
 					"response": []
 				}
 			],
-			"_postman_id": "971aa7ae-85ba-4aa6-a4c9-13bee34f518e"
+			"id": "971aa7ae-85ba-4aa6-a4c9-13bee34f518e"
 		},
 		{
 			"name": "Transaction  Category",
 			"item": [
 				{
 					"name": "List Category",
-					"_postman_id": "e0671943-9eff-4e11-aecf-f2f692c46445",
+					"id": "e0671943-9eff-4e11-aecf-f2f692c46445",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
@@ -787,7 +793,7 @@
 				},
 				{
 					"name": "Create Category  [Admin]",
-					"_postman_id": "2e563166-76e7-4aae-b504-b013a9d43591",
+					"id": "2e563166-76e7-4aae-b504-b013a9d43591",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
@@ -809,7 +815,7 @@
 				},
 				{
 					"name": "Update Category  [Admin]",
-					"_postman_id": "26a7bf7e-2053-4c28-b25d-7dd8f95acb5a",
+					"id": "26a7bf7e-2053-4c28-b25d-7dd8f95acb5a",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
@@ -831,7 +837,7 @@
 				},
 				{
 					"name": "Delete Category [Admin]",
-					"_postman_id": "34c992b0-6eb5-462d-bfd6-7e8b9fc187fb",
+					"id": "34c992b0-6eb5-462d-bfd6-7e8b9fc187fb",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
@@ -852,7 +858,7 @@
 					"response": []
 				}
 			],
-			"_postman_id": "fdc76b74-fba4-4226-9cf4-7187e74d048f"
+			"id": "fdc76b74-fba4-4226-9cf4-7187e74d048f"
 		}
 	]
 }
