@@ -900,6 +900,18 @@
 						"url": "{{baseURL}}{{apiVersion}}/category/delete/642878fa51e2b9707e5434d4"
 					},
 					"response": []
+				},
+				{
+					"name": "New Request",
+					"id": "9dbff1f6-141b-488d-b971-c1218b9f22b6",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
 				}
 			],
 			"id": "fdc76b74-fba4-4226-9cf4-7187e74d048f"
