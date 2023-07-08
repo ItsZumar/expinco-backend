@@ -910,6 +910,16 @@
 					"request": {
 						"method": "GET",
 						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "imagePath",
+									"type": "file",
+									"src": "/home/zumar/Pictures/Screenshots/yellen/Screenshot from 2023-07-03 12-35-20.png"
+								}
+							]
+						},
 						"url": "{{baseURL}}{{apiVersion}}/category/upload-image"
 					},
 					"response": []
