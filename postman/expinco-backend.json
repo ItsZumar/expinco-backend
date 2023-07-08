@@ -626,7 +626,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "{{baseURL}}{{apiVersion}}/transaction/list?type=INCOME&sortTransactionBy=NEWEST&page=1&perPage=10&category=64a96b6162c5c32e9b62fe09",
+							"raw": "{{baseURL}}{{apiVersion}}/transaction/list",
 							"host": [
 								"{{baseURL}}{{apiVersion}}"
 							],
@@ -637,23 +637,28 @@
 							"query": [
 								{
 									"key": "type",
-									"value": "INCOME"
+									"value": "INCOME",
+									"disabled": true
 								},
 								{
 									"key": "sortTransactionBy",
-									"value": "NEWEST"
+									"value": "NEWEST",
+									"disabled": true
 								},
 								{
 									"key": "page",
-									"value": "1"
+									"value": "1",
+									"disabled": true
 								},
 								{
 									"key": "perPage",
-									"value": "10"
+									"value": "10",
+									"disabled": true
 								},
 								{
 									"key": "category",
-									"value": "64a96b6162c5c32e9b62fe09"
+									"value": "64a96b6162c5c32e9b62fe09",
+									"disabled": true
 								}
 							]
 						}
