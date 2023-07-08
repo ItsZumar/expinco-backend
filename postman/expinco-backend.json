@@ -677,7 +677,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"type\": \"EXPENSE\",\n    \"amount\": 50,\n    \"category\": \"64a96b6162c5c32e9b62fe09\",\n    \"description\": \"This is test gaming transaction\",\n    \"wallet\": \"64a96b3562c5c32e9b62fe06\",\n    \"attachments\": [\"6499bcb0bdeb19285d6d92a1\"]\n}",
+							"raw": "{\n    \"type\": \"INCOME\",\n    \"amount\": 550,\n    \"category\": \"64a96b6162c5c32e9b62fe09\",\n    \"description\": \"This is test gaming transaction\",\n    \"wallet\": \"64a96b3562c5c32e9b62fe06\",\n    \"attachments\": [\"6499bcb0bdeb19285d6d92a1\"]\n}",
 							"options": {
 								"raw": {
 									"language": "json"
