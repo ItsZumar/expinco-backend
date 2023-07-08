@@ -6,10 +6,14 @@ import { HttpStatusCode } from "../../../errors/types/HttpStatusCode";
 import { CreateTransactionI, DeleteTransactionI, ListTransactionI, UpdateTransactionI } from "./response/transaction.response";
 import { Wallet } from "../../wallet/model/wallet.model";
 import { WalletDocument } from "../../wallet/model/wallet.model";
+import { toUpper } from "lodash";
+import { TransactionCategories, TransactionSortType, TransactionType } from "../../../enums";
 
-export const listTransactionService = async (req: Request, res: Response, next: NextFunction): Promise<ListTransactionI> => {
+export const listTransactionService = async (req: Request, res: Response, next: NextFunction): Promise<ListTransactionI | any> => {
   const page = parseInt(req.query.page as string) || 1;
   const limit = parseInt(req.query.perPage as string) || 10;
+  const transactionsInDB = [];
+  const { type, sortTransactionBy, category } = req.query;
 
   if (page <= 0 || limit <= 0) {
     throw new AppError(HttpStatusCode.BadRequest, "Pagination parameters must be greater than 0!");
@@ -20,24 +24,109 @@ export const listTransactionService = async (req: Request, res: Response, next: 
   const hasPrevious = startIndex > 0 ? true : false;
   const hasNext = endIndex < (await Transaction.find({ owner: req.user._id }).countDocuments().exec()) ? true : false;
 
-  const transactionsInDB = await Transaction.find({ owner: req.user._id })
-    .sort("-createdAt")
-    .limit(limit)
-    .skip(startIndex)
-    .populate("category")
-    .populate({
-      path: "wallet",
-      select: ["_id", "amount", "name"],
-      // populate: {
-      //   path: "walletType",
-      // },
-    })
-    .populate("attachments")
-    .select(["-owner"])
-    .exec();
+  switch (type) {
+    case TransactionType.INCOME: {
+      const transactions = await Transaction.find({ owner: req.user._id, type: TransactionType.INCOME });
+      transactionsInDB.push(transactions);
+      break;
+    }
+
+    case TransactionType.EXPENSE: {
+      const transactions = await Transaction.find({ owner: req.user._id, type: TransactionType.EXPENSE });
+      transactionsInDB.push(transactions);
+      break;
+    }
+
+    case TransactionType.TRANSFER: {
+      const transactions = await Transaction.find({ owner: req.user._id, type: TransactionType.TRANSFER });
+      transactionsInDB.push(transactions);
+      break;
+    }
+
+    default: {
+      const transactions = await Transaction.find({ owner: req.user._id })
+        .sort("-createdAt")
+        .limit(limit)
+        .skip(startIndex)
+        .populate("category")
+        .populate({
+          path: "wallet",
+          select: ["_id", "amount", "name"],
+          // populate: {
+          //   path: "walletType",
+          // },
+        })
+        .populate("attachments")
+        .select(["-owner"])
+        .exec();
+
+      transactionsInDB.push(transactions);
+      break;
+    }
+  }
+
+  switch (sortTransactionBy) {
+    case TransactionSortType.HIGHEST: {
+      transactionsInDB[0].sort((a, b) => b.amount - a.amount);
+      break;
+    }
+
+    case TransactionSortType.LOWEST: {
+      transactionsInDB[0].sort((a, b) => a.amount - b.amount);
+      break;
+    }
+
+    case TransactionSortType.NEWEST: {
+      transactionsInDB[0].sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+      break;
+    }
+
+    case TransactionSortType.OLDEST: {
+      transactionsInDB[0].sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
+      break;
+    }
+  }
+
+  switch (category) {
+    case TransactionCategories.FOOD: {
+      const filteredTransactions = transactionsInDB[0].filter((transaction) => {
+        return transaction.category._id.toString() === TransactionCategories.FOOD;
+      });
+      transactionsInDB[0] = filteredTransactions;
+      break;
+    }
+
+    case TransactionCategories.GAMING: {
+      const filteredTransactions = transactionsInDB[0].filter((transaction) => {
+        return transaction.category._id.toString() === TransactionCategories.GAMING;
+      });
+      transactionsInDB[0] = filteredTransactions;
+      break;
+    }
+
+    case TransactionCategories.SHOPPING: {
+      const filteredTransactions = transactionsInDB[0].filter((transaction) => {
+        return transaction.category._id.toString() === TransactionCategories.SHOPPING;
+      });
+      transactionsInDB[0] = filteredTransactions;
+      break;
+    }
+
+    case TransactionCategories.SUBSCRIPTION: {
+      const filteredTransactions = transactionsInDB[0].filter((transaction) => {
+        return transaction.category._id.toString() === TransactionCategories.SUBSCRIPTION;
+      });
+      transactionsInDB[0] = filteredTransactions;
+      break;
+    }
+
+    default: {
+      break;
+    }
+  }
 
   const result = {
-    data: transactionsInDB,
+    data: transactionsInDB[0],
     pagination: {
       page: page,
       perPage: limit,
@@ -50,27 +139,7 @@ export const listTransactionService = async (req: Request, res: Response, next: 
 };
 
 export const createTransactionService = async (req: Request, res: Response, next: NextFunction): Promise<CreateTransactionI> => {
-  const { type, amount, category, description, wallet, attachments } = req.body;
-
-  //changes
-  // const userWallets = await Wallet.find({ owner: req.user._id });
-  // const availableBalance = userWallets.map((wal: WalletDocument) => wal.amount).reduce((prev: any, curr: any) => prev + curr);
-
-  const walletById = await Wallet.findById({ _id: wallet });
-
-  //*
-
-  //CHANGES
-  if (type === "EXPENSE") {
-    walletById.amount = walletById.amount - amount;
-    walletById.save();
-    console.log(walletById);
-  } else if (type === "INCOME") {
-    walletById.amount = walletById.amount + amount;
-    walletById.save();
-  }
-
-  //*
+  const { type, amount, category, description, wallet, attachments }: Partial<CreateTransactionI> = req.body;
 
   if (!isValidObjectId(category)) {
     throw new AppError(HttpStatusCode.NotFound, "Cateogry id is not valid");
@@ -83,6 +152,29 @@ export const createTransactionService = async (req: Request, res: Response, next
       if (!isValidObjectId(attachId)) {
         throw new AppError(HttpStatusCode.BadRequest, "Attachment id is not valid");
       }
+    }
+  }
+
+  const walletById = await Wallet.findById({ _id: wallet });
+
+  switch (type) {
+    case TransactionType.EXPENSE: {
+      if (walletById.amount > amount) {
+        walletById.amount = walletById.amount - amount;
+        walletById.save();
+      } else {
+        throw new AppError(HttpStatusCode.BadRequest, "You don't have sufficient amount");
+      }
+      break;
+    }
+    case TransactionType.INCOME: {
+      if (amount < 0) {
+        throw new AppError(HttpStatusCode.BadRequest, "The amount cannot be in negative!");
+      } else {
+        walletById.amount = walletById.amount + amount;
+        walletById.save();
+      }
+      break;
     }
   }
 
@@ -169,4 +261,46 @@ export const deleteTransactionService = async (req: Request, res: Response, next
       status: "Your transaction has been deleted successfully",
     };
   }
+};
+
+export const getTransactionsByTypeService = async (req: Request, res: Response, next: NextFunction): Promise<ListTransactionI> => {
+  const page = parseInt(req.query.page as string) || 1;
+  const limit = parseInt(req.query.perPage as string) || 10;
+
+  if (page <= 0 || limit <= 0) {
+    throw new AppError(HttpStatusCode.BadRequest, "Pagination parameters must be greater than 0!");
+  }
+
+  const startIndex = (page - 1) * limit;
+  const endIndex = page * limit;
+  const hasPrevious = startIndex > 0 ? true : false;
+  const hasNext = endIndex < (await Transaction.find({ owner: req.user._id }).countDocuments().exec()) ? true : false;
+
+  const transactionsInDB = await Transaction.find({ type: toUpper(req.params.type) })
+    .sort("-createdAt")
+    .limit(limit)
+    .skip(startIndex)
+    .populate("category")
+    .populate({
+      path: "wallet",
+      select: ["_id", "amount", "name"],
+      // populate: {
+      //   path: "walletType",
+      // },
+    })
+    .populate("attachments")
+    .select(["-owner"])
+    .exec();
+
+  const result = {
+    data: transactionsInDB,
+    pagination: {
+      page: page,
+      perPage: limit,
+      hasPrevious: hasPrevious,
+      hasNext: hasNext,
+    },
+  };
+
+  return result;
 };

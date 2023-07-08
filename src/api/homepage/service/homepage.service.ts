@@ -4,6 +4,10 @@ import { Wallet } from "../../wallet/model/wallet.model";
 import { HomepageI } from "./response/homepage.response";
 
 export const homepageService = async (req: Request, res: Response, next: NextFunction): Promise<HomepageI> => {
+  const year = req.body.year;
+  const month = req.body.month;
+  const startOfMonth = `${year}-${month}-01`;
+
   const userWallets = await Wallet.find({ owner: req.user._id });
   const availableBalance = userWallets.map((wal) => wal.amount).reduce((prev, curr) => prev + curr);
 
@@ -11,6 +15,10 @@ export const homepageService = async (req: Request, res: Response, next: NextFun
     {
       $match: {
         owner: req.user._id,
+        createdAt: {
+          $gte: new Date(startOfMonth),
+          $lt: new Date(new Date(startOfMonth).setMonth(new Date(startOfMonth).getMonth() + 1)),
+        },
       },
     },
     {
@@ -44,9 +52,39 @@ export const homepageService = async (req: Request, res: Response, next: NextFun
   ])
     .exec()
     .then((response) => {
-      response[0]._id = undefined;
-      return response[0];
+      if (response.length > 0) {
+        response[0]._id = undefined;
+        return response[0];
+      } else {
+        return null;
+      }
     });
 
   return result;
 };
+
+// $group: {
+//   _id: "$owner",
+//   totalIncome: {
+//     $sum: {
+//       $cond: [
+//         {
+//           $and: [{ $eq: ["$type", "INCOME"] }, { $eq: ["$createdAt", month] }],
+//         },
+//         "$amount",
+//         0,
+//       ],
+//     },
+//   },
+//   totalExpense: {
+//     $sum: {
+//       $cond: [
+//         {
+//           $and: [{ $eq: ["$type", "EXPENSE"] }, { $eq: ["$createdAt", month] }],
+//         },
+//         "$amount",
+//         0,
+//       ],
+//     },
+//   },
+// },
