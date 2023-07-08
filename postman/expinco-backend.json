@@ -909,7 +909,8 @@
 					},
 					"request": {
 						"method": "GET",
-						"header": []
+						"header": [],
+						"url": "{{baseURL}}{{apiVersion}}/category/list"
 					},
 					"response": []
 				}
