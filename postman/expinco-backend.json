@@ -910,7 +910,7 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": "{{baseURL}}{{apiVersion}}/category/list"
+						"url": "{{baseURL}}{{apiVersion}}/category/upload-image"
 					},
 					"response": []
 				}
