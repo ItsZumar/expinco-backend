@@ -626,7 +626,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "{{baseURL}}{{apiVersion}}/transaction/list?type=INCOME&sortTransactionBy=NEWEST&page=1&perPage=10&category=6499bcc2bdeb19285d6d92a7",
+							"raw": "{{baseURL}}{{apiVersion}}/transaction/list?type=INCOME&sortTransactionBy=NEWEST&page=1&perPage=10&category=64a96b6162c5c32e9b62fe09",
 							"host": [
 								"{{baseURL}}{{apiVersion}}"
 							],
@@ -653,7 +653,7 @@
 								},
 								{
 									"key": "category",
-									"value": "6499bcc2bdeb19285d6d92a7"
+									"value": "64a96b6162c5c32e9b62fe09"
 								}
 							]
 						}
