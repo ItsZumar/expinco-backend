@@ -902,7 +902,7 @@
 					"response": []
 				},
 				{
-					"name": "New Request",
+					"name": "Upload Image",
 					"id": "9dbff1f6-141b-488d-b971-c1218b9f22b6",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
