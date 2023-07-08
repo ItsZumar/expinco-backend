@@ -169,7 +169,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"firstname\": \"Zumar\",\n    \"lastname\": \"Saeed\",\n    \"email\": \"zumar@yopmail.com\",\n    \"password\": \"zumar@123\"\n}\n",
+									"raw": "{\n    \"firstname\": \"sara\",\n    \"lastname\": \"malik\",\n    \"email\": \"sara@gmail.com.com\",\n    \"password\": \"sara@123\"\n}\n",
 									"options": {
 										"raw": {
 											"language": "json"
