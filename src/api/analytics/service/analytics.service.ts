@@ -174,3 +174,87 @@ export const spendFrequencyService = async (req: Request, res: Response, next: N
 
   return result;
 };
+
+export const financialReportService = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+  const { startingDate, endingDate } = req.body;
+  const { type } = req.query;
+  const transactionsInDB = [];
+  let sum = 0;
+  const page = parseInt(req.query.page as string) || 1;
+  const limit = parseInt(req.query.perPage as string) || 10;
+
+  if (page <= 0 || limit <= 0) {
+    throw new AppError(HttpStatusCode.BadRequest, "Pagination parameters must be greater than 0!");
+  }
+
+  const startIndex = (page - 1) * limit;
+  const endIndex = page * limit;
+  const hasPrevious = startIndex > 0 ? true : false;
+  const hasNext = endIndex < (await Transaction.find({ owner: req.user._id }).countDocuments().exec()) ? true : false;
+
+  switch (type) {
+    case TransactionType.INCOME: {
+      const transactions: TransactionDocument[] = await Transaction.find({
+        owner: req.user._id,
+        type: TransactionType.INCOME,
+        createdAt: {
+          $gte: startingDate,
+          $lt: endingDate,
+        },
+      })
+        .sort("-createdAt")
+        .limit(limit)
+        .skip(startIndex)
+        .populate("category")
+        .populate({
+          path: "wallet",
+          select: ["_id", "amount", "name"],
+        })
+        .populate("attachments")
+        .select(["-owner"])
+        .exec();
+      transactionsInDB.push(transactions);
+      sum = transactions.reduce((total, transaction) => total + transaction.amount, 0);
+
+      break;
+    }
+
+    case TransactionType.EXPENSE: {
+      const transactions: TransactionDocument[] = await Transaction.find({
+        owner: req.user._id,
+        type: TransactionType.EXPENSE,
+        createdAt: {
+          $gte: startingDate,
+          $lt: endingDate,
+        },
+      })
+        .sort("-createdAt")
+        .limit(limit)
+        .skip(startIndex)
+        .populate("category")
+        .populate({
+          path: "wallet",
+          select: ["_id", "amount", "name"],
+        })
+        .populate("attachments")
+        .select(["-owner"])
+        .exec();
+
+      transactionsInDB.push(transactions);
+      sum = transactionsInDB[0].reduce((total, transaction) => total + transaction.amount, 0);
+      break;
+    }
+  }
+
+  const result = {
+    data: transactionsInDB[0],
+    totalAmount: sum,
+    pagination: {
+      page: page,
+      perPage: limit,
+      hasPrevious: hasPrevious,
+      hasNext: hasNext,
+    },
+  };
+  return result;
+};
