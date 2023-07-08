@@ -949,7 +949,7 @@
 								}
 							]
 						},
-						"url": "{{baseURL}}{{apiVersion}}/upload/image"
+						"url": "{{baseURL}}{{apiVersion}}/upload/image/upload-image"
 					},
 					"response": []
 				}
