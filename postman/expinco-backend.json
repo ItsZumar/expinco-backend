@@ -908,7 +908,7 @@
 						"disableBodyPruning": true
 					},
 					"request": {
-						"method": "GET",
+						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "formdata",
@@ -916,7 +916,7 @@
 								{
 									"key": "file",
 									"type": "file",
-									"src": "/home/zumar/Pictures/Screenshots/yellen/Screenshot from 2023-07-03 12-35-20.png"
+									"src": "/home/zumar/Pictures/Screenshots/yellen/Screenshot from 2023-07-03 12-35-52.png"
 								}
 							]
 						},
