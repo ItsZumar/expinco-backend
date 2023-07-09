@@ -928,7 +928,7 @@
 			"name": "File Storage",
 			"item": [
 				{
-					"name": "Upoad File To Cloudinary",
+					"name": "Upload File To Cloudinary",
 					"id": "cf703e00-6e71-481d-b510-5d86398a9e9c",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
