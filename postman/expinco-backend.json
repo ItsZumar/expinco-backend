@@ -949,6 +949,18 @@
 						"url": "{{baseURL}}{{apiVersion}}/file/upload-file"
 					},
 					"response": []
+				},
+				{
+					"name": "New Request",
+					"id": "6a355845-7727-432c-8fe9-271efeb3e5eb",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
 				}
 			],
 			"id": "ea2fe2b4-a375-45f0-8eab-e1c9f02505a3"
