@@ -957,8 +957,9 @@
 						"disableBodyPruning": true
 					},
 					"request": {
-						"method": "GET",
-						"header": []
+						"method": "DELETE",
+						"header": [],
+						"url": "{{baseURL}}{{apiVersion}}/file/upload-file"
 					},
 					"response": []
 				}
