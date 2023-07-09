@@ -5,13 +5,12 @@ import { AppError } from "../../../errors/error.base";
 import { HttpStatusCode } from "../../../errors/types/HttpStatusCode";
 import { CreateTransactionI, DeleteTransactionI, ListTransactionI, UpdateTransactionI } from "./response/transaction.response";
 import { Wallet } from "../../wallet/model/wallet.model";
-import { WalletDocument } from "../../wallet/model/wallet.model";
 import { toUpper } from "lodash";
 import { TransactionCategories, TransactionSortType, TransactionType } from "../../../enums";
 
-export const listTransactionService = async (req: Request, res: Response, next: NextFunction): Promise<ListTransactionI | any> => {
-  const page = parseInt(req.query.page as string) || 1;
-  const limit = parseInt(req.query.perPage as string) || 10;
+export const listTransactionService = async (req: Request, res: Response, next: NextFunction): Promise<ListTransactionI> => {
+  const page: number = parseInt(req.query.page as string) || 1;
+  const limit: number = parseInt(req.query.perPage as string) || 10;
   const transactionsInDB = [];
   const { type, sortTransactionBy, category } = req.query;
 
@@ -24,46 +23,36 @@ export const listTransactionService = async (req: Request, res: Response, next: 
   const hasPrevious = startIndex > 0 ? true : false;
   const hasNext = endIndex < (await Transaction.find({ owner: req.user._id }).countDocuments().exec()) ? true : false;
 
+  let transactionsQuery: { owner: string; type?: string } = { owner: req.user._id };
+
   switch (type) {
-    case TransactionType.INCOME: {
-      const transactions = await Transaction.find({ owner: req.user._id, type: TransactionType.INCOME });
-      transactionsInDB.push(transactions);
+    case TransactionType.INCOME:
+      transactionsQuery.type = TransactionType.INCOME;
       break;
-    }
-
-    case TransactionType.EXPENSE: {
-      const transactions = await Transaction.find({ owner: req.user._id, type: TransactionType.EXPENSE });
-      transactionsInDB.push(transactions);
+    case TransactionType.EXPENSE:
+      transactionsQuery.type = TransactionType.EXPENSE;
       break;
-    }
-
-    case TransactionType.TRANSFER: {
-      const transactions = await Transaction.find({ owner: req.user._id, type: TransactionType.TRANSFER });
-      transactionsInDB.push(transactions);
+    case TransactionType.TRANSFER:
+      transactionsQuery.type = TransactionType.TRANSFER;
       break;
-    }
-
-    default: {
-      const transactions = await Transaction.find({ owner: req.user._id })
-        .sort("-createdAt")
-        .limit(limit)
-        .skip(startIndex)
-        .populate("category")
-        .populate({
-          path: "wallet",
-          select: ["_id", "amount", "name"],
-          // populate: {
-          //   path: "walletType",
-          // },
-        })
-        .populate("attachments")
-        .select(["-owner"])
-        .exec();
-
-      transactionsInDB.push(transactions);
+    default:
       break;
-    }
   }
+
+  const transactions = await Transaction.find(transactionsQuery)
+    .sort("-createdAt")
+    .limit(limit)
+    .skip(startIndex)
+    .populate("category")
+    .populate({
+      path: "wallet",
+      select: ["_id", "amount", "name"],
+    })
+    .populate("attachments")
+    .select(["-owner"])
+    .exec();
+
+  transactionsInDB.push(transactions);
 
   switch (sortTransactionBy) {
     case TransactionSortType.HIGHEST: {

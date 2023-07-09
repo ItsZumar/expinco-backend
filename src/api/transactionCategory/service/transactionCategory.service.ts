@@ -17,7 +17,7 @@ export const listCategoryService = async (req: Request, res: Response, next: Nex
   const endIndex = page * limit;
   const hasPrevious = startIndex > 0 ? true : false;
   const hasNext = endIndex < (await TransactionCategory.find().countDocuments().exec()) ? true : false;
-  
+
   const categoriesInDB = await TransactionCategory.find().limit(limit).skip(startIndex);
 
   const result = {
