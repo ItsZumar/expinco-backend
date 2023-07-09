@@ -946,7 +946,7 @@
 								}
 							]
 						},
-						"url": "{{baseURL}}{{apiVersion}}/upload/image/upload-file"
+						"url": "{{baseURL}}{{apiVersion}}/file/upload-file"
 					},
 					"response": []
 				}
