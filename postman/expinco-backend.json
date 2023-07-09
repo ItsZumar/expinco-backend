@@ -959,7 +959,7 @@
 					"request": {
 						"method": "DELETE",
 						"header": [],
-						"url": "{{baseURL}}{{apiVersion}}/file/delete-file/x493ohui8jmr2uk3p0cw"
+						"url": "{{baseURL}}{{apiVersion}}/file/delete-file/ijwdgd12e6hin5ups1ti"
 					},
 					"response": []
 				}
