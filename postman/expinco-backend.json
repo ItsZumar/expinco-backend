@@ -951,7 +951,7 @@
 					"response": []
 				},
 				{
-					"name": "New Request",
+					"name": "Delete File From Cloudinary",
 					"id": "6a355845-7727-432c-8fe9-271efeb3e5eb",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
