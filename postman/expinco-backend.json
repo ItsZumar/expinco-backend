@@ -626,7 +626,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "{{baseURL}}{{apiVersion}}/transaction/list?type=INCOME&sortTransactionBy=HIGHEST&category=64a96b6162c5c32e9b62fe09",
+							"raw": "{{baseURL}}{{apiVersion}}/transaction/list?type=INCOME&sortTransactionBy=OLDEST&category=64a96b6162c5c32e9b62fe09",
 							"host": [
 								"{{baseURL}}{{apiVersion}}"
 							],
@@ -641,7 +641,7 @@
 								},
 								{
 									"key": "sortTransactionBy",
-									"value": "HIGHEST"
+									"value": "OLDEST"
 								},
 								{
 									"key": "page",
