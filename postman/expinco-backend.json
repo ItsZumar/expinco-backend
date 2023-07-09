@@ -959,23 +959,7 @@
 					"request": {
 						"method": "DELETE",
 						"header": [],
-						"url": {
-							"raw": "{{baseURL}}{{apiVersion}}/file/delete-file/:public_id",
-							"host": [
-								"{{baseURL}}{{apiVersion}}"
-							],
-							"path": [
-								"file",
-								"delete-file",
-								":public_id"
-							],
-							"variable": [
-								{
-									"key": "public_id",
-									"value": null
-								}
-							]
-						}
+						"url": "{{baseURL}}{{apiVersion}}/file/delete-file/x493ohui8jmr2uk3p0cw"
 					},
 					"response": []
 				}
