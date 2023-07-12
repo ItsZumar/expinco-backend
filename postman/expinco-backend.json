@@ -679,7 +679,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"type\": \"INCOME\",\n    \"amount\": 5500,\n    \"category\": \"64a96b6162c5c32e9b62fe09\",\n    \"description\": \"This is test gaming transaction\",\n    \"wallet\": \"64a96b3562c5c32e9b62fe06\",\n    \"attachments\": [\"oniegg9soqflrlu5ot86\"]\n}",
+							"raw": "{\n    \"type\": \"INCOME\",\n    \"amount\": 5500,\n    \"category\": \"64a96b6162c5c32e9b62fe09\",\n    \"description\": \"This is test gaming transaction\",\n    \"wallet\": \"64a96b3562c5c32e9b62fe06\",\n    \"attachments\": [\"64aea94f32897454b13bee13\"]\n}",
 							"options": {
 								"raw": {
 									"language": "json"
