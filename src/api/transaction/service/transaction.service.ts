@@ -7,6 +7,7 @@ import { CreateTransactionI, DeleteTransactionI, ListTransactionI, UpdateTransac
 import { Wallet } from "../../wallet/model/wallet.model";
 import { toUpper } from "lodash";
 import { TransactionCategories, TransactionSortType, TransactionType } from "../../../enums";
+import { FileStorage } from "../../fileStorage/model/fileStorage.model";
 
 export const listTransactionService = async (req: Request, res: Response, next: NextFunction): Promise<ListTransactionI> => {
   const page: number = parseInt(req.query.page as string) || 1;
@@ -130,6 +131,8 @@ export const listTransactionService = async (req: Request, res: Response, next: 
 export const createTransactionService = async (req: Request, res: Response, next: NextFunction): Promise<CreateTransactionI> => {
   const { type, amount, category, description, wallet, attachments }: Partial<CreateTransactionI> = req.body;
 
+  const arr = [];
+
   if (!isValidObjectId(category)) {
     throw new AppError(HttpStatusCode.NotFound, "Cateogry id is not valid");
   } else if (!isValidObjectId(wallet)) {
@@ -141,6 +144,8 @@ export const createTransactionService = async (req: Request, res: Response, next
       if (!isValidObjectId(attachId)) {
         throw new AppError(HttpStatusCode.BadRequest, "Attachment id is not valid");
       }
+      const attachment = await FileStorage.findById({ _id: attachId });
+      arr.push(attachment);
     }
   }
 
@@ -167,6 +172,8 @@ export const createTransactionService = async (req: Request, res: Response, next
     }
   }
 
+  console.log(arr);
+
   const newTransaction = new Transaction({
     type: type,
     amount: amount,
@@ -174,7 +181,8 @@ export const createTransactionService = async (req: Request, res: Response, next
     description: description,
     wallet: wallet,
     owner: req.user._id,
-    attachments: attachments || [],
+    attachments: arr,
+    // attachments: [attachment],
   });
 
   await newTransaction.save();
