@@ -626,7 +626,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "{{baseURL}}{{apiVersion}}/transaction/list?type=EXPENSE&sortTransactionBy=OLDEST&page=1&perPage=2&category=64a96b6162c5c32e9b62fe09",
+							"raw": "{{baseURL}}{{apiVersion}}/transaction/list?type=EXPENSE&sortTransactionBy=OLDEST&page=1&perPage=3&category=64a96b6162c5c32e9b62fe09",
 							"host": [
 								"{{baseURL}}{{apiVersion}}"
 							],
@@ -649,7 +649,7 @@
 								},
 								{
 									"key": "perPage",
-									"value": "2"
+									"value": "3"
 								},
 								{
 									"key": "category",
