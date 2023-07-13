@@ -762,14 +762,14 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseURL}}{{apiVersion}}/transaction/list/EXPENSE?page=1&perPage=10",
+							"raw": "{{baseURL}}{{apiVersion}}/transaction/list/income?page=1&perPage=10",
 							"host": [
 								"{{baseURL}}{{apiVersion}}"
 							],
 							"path": [
 								"transaction",
 								"list",
-								"EXPENSE"
+								"income"
 							],
 							"query": [
 								{
