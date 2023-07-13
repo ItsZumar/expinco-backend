@@ -626,7 +626,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "{{baseURL}}{{apiVersion}}/transaction/list?type=EXPENSE&sortTransactionBy=OLDEST&category=64a96b6162c5c32e9b62fe09",
+							"raw": "{{baseURL}}{{apiVersion}}/transaction/list?type=EXPENSE&sortTransactionBy=OLDEST&page=1&perPage=2&category=64a96b6162c5c32e9b62fe09",
 							"host": [
 								"{{baseURL}}{{apiVersion}}"
 							],
@@ -645,13 +645,11 @@
 								},
 								{
 									"key": "page",
-									"value": "1",
-									"disabled": true
+									"value": "1"
 								},
 								{
 									"key": "perPage",
-									"value": "10",
-									"disabled": true
+									"value": "2"
 								},
 								{
 									"key": "category",
