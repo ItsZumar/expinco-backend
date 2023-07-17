@@ -1,0 +1,969 @@
+{
+	"info": {
+		"_postman_id": "43108658-8c1f-4ab5-acb7-710d435fa2be",
+		"name": "Expinco",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Analytics",
+			"item": [
+				{
+					"name": "List Spend frequency",
+					"id": "0e0d31cb-dac2-49b3-b780-fef9c66722f4",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{token}}"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}{{apiVersion}}/analytics/list-spend-frequency?orderBy=YEAR",
+							"host": [
+								"{{baseURL}}{{apiVersion}}"
+							],
+							"path": [
+								"analytics",
+								"list-spend-frequency"
+							],
+							"query": [
+								{
+									"key": "orderBy",
+									"value": "YEAR"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Financial Report",
+					"id": "ecd1c3e1-1c08-4068-bf05-0d807fc42eb8",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{token}}"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"startingDate\": \"2023-07-08T13:01:55.252Z\",\n    \"endingDate\": \"2023-07-10T13:01:55.252Z\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}{{apiVersion}}/analytics/financial-report?type=INCOME&page=1&perPage=10",
+							"host": [
+								"{{baseURL}}{{apiVersion}}"
+							],
+							"path": [
+								"analytics",
+								"financial-report"
+							],
+							"query": [
+								{
+									"key": "type",
+									"value": "INCOME"
+								},
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "perPage",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"id": "0cd0b5c0-9a4e-4b9d-9560-941a86d475ad"
+		},
+		{
+			"name": "Homepage",
+			"item": [
+				{
+					"name": "Get Inc. / Exp. stats",
+					"id": "cdb8957c-1ff3-48e7-b9fb-dc3359a933d7",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{token}}"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"date\": \"2023-06-26\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{baseURL}}{{apiVersion}}/homepage"
+					},
+					"response": []
+				}
+			],
+			"id": "2da045f3-7888-442e-85ca-ae1b92826746"
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Auth",
+					"item": [
+						{
+							"name": "Resend Email Verification",
+							"id": "f1b14e41-9c99-4dac-8c7c-1f03a17ba237",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\": \"haseeb@yopmail.com\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{baseURL}}{{apiVersion}}/user/auth/resend-verify-email"
+							},
+							"response": []
+						},
+						{
+							"name": "Email Signup",
+							"id": "761eef27-237e-4989-8526-3b21c82cdaa4",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"firstname\": \"hania\",\n    \"lastname\": \"khan\",\n    \"email\": \"hania@gmail.com\",\n    \"password\": \"hania@123\"\n}\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{baseURL}}{{apiVersion}}/user/auth/email-signup"
+							},
+							"response": []
+						},
+						{
+							"name": "Email Verification",
+							"id": "7290e3ae-40ba-49f2-979e-70f987225338",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\": \"zumar@yopmail.com\",\n    \"authCode\": \"667912\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{baseURL}}{{apiVersion}}/user/auth/verify-email"
+							},
+							"response": []
+						},
+						{
+							"name": "Email Signin",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "ce3e9bdd-3e4f-4dde-8155-0e675e82a2f3",
+										"exec": [
+											"let response = this.pm.response.json();",
+											"",
+											"if (response.result) {",
+											"    this.pm.environment.set(\"token\", response.result.token);",
+											"}"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"id": "ff08234c-4a2f-43aa-9a1b-546985373f50",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\": \"hania@gmail.com\",\n    \"password\": \"hania@123\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{baseURL}}{{apiVersion}}/user/auth/email-signin"
+							},
+							"response": []
+						},
+						{
+							"name": "Change Password",
+							"id": "3bb15191-c8f2-4376-9c1a-3f77a4644393",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDA3NWUzOGNkNmNkNjA5OGIwY2FmYTgiLCJpYXQiOjE2NzgyMDYxNTIsImV4cCI6MTY3OTA3MDE1Mn0.sKLGdhiMbvraY-P769AyhoftsOJKYJTzuaMsOisergA"
+									}
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"oldPassword\": \"Haseeb@123\",\n    \"newPassword\": \"Haseeb@123\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{baseURL}}{{apiVersion}}/user/auth/change-password"
+							},
+							"response": []
+						},
+						{
+							"name": "Forgot Password",
+							"id": "0a3149d2-98b8-435f-8c71-7bdf30adcfe8",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\": \"haseeb@yopmail.com\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{baseURL}}{{apiVersion}}/user/auth/forgot-password"
+							},
+							"response": []
+						},
+						{
+							"name": "Reset Password",
+							"id": "97462af6-39ec-4f0d-8a2b-34c7c50865f5",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\": \"haseeb@yopmail.com\",\n    \"authCode\": \"652862\",\n    \"newPassword\": \"Haseeb@1234\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{baseURL}}{{apiVersion}}/user/auth/reset-password"
+							},
+							"response": []
+						}
+					],
+					"id": "b2c38bbf-6069-42da-b7b9-6aa980add18b"
+				},
+				{
+					"name": "Profile",
+					"item": [
+						{
+							"name": "Get Profile",
+							"id": "21172e1b-b7ea-4a38-b26e-6ac303163ace",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "{{token}}"
+									}
+								},
+								"method": "GET",
+								"header": [],
+								"url": "{{baseURL}}{{apiVersion}}/user/auth/get-profile"
+							},
+							"response": []
+						},
+						{
+							"name": "Update Profile",
+							"id": "291bf2a7-8721-40ed-b976-22efdc92660f",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "{{token}}"
+									}
+								},
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"displayPicture\": \"https://picsum.photos/id/177/2515/1832\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{baseURL}}{{apiVersion}}/user/auth/update-profile"
+							},
+							"response": []
+						}
+					],
+					"id": "353749f4-e80c-48f9-8e78-efa703627eee"
+				}
+			],
+			"id": "08a08904-fae2-4e06-ba61-664aa96c71ce"
+		},
+		{
+			"name": "Wallet",
+			"item": [
+				{
+					"name": "Type [Admin]",
+					"item": [
+						{
+							"name": "Get All Wallet Types",
+							"id": "95390ee9-b5a9-4dac-bb61-974af94a033b",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseURL}}{{apiVersion}}/wallet/list-wallet-type?page=1&perPage=10",
+									"host": [
+										"{{baseURL}}{{apiVersion}}"
+									],
+									"path": [
+										"wallet",
+										"list-wallet-type"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "1"
+										},
+										{
+											"key": "perPage",
+											"value": "10"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add Wallet Type",
+							"id": "33b68119-6d5a-4ffc-805a-fb3bd08bd565",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "{{token}}"
+									}
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"Cash\",\n    \"icon\": null\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{baseURL}}{{apiVersion}}/wallet/add-type"
+							},
+							"response": []
+						},
+						{
+							"name": "Update Wallet Type",
+							"id": "515c0280-0e61-45f9-b194-26dbabb84575",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "{{token}}"
+									}
+								},
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"_id\": \"6427cd106a6cd06abe76441cs\",\n    \"name\": \"Banke\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{baseURL}}{{apiVersion}}/wallet/update-type"
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Wallet Type",
+							"id": "8aaa855f-91be-473f-9706-8cb58735f0a5",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "{{token}}"
+									}
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": "{{baseURL}}{{apiVersion}}/wallet/delete-type/642717267d47a4f97cd712bd"
+							},
+							"response": []
+						}
+					],
+					"id": "1d9e1072-0fd5-46c4-b458-b7f054ea645d"
+				},
+				{
+					"name": "Get All Wallets",
+					"id": "0f171b57-0bcd-4fa1-aae5-01e1d3560f33",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{token}}"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}{{apiVersion}}/wallet/list-wallet?page=1&perPage=10",
+							"host": [
+								"{{baseURL}}{{apiVersion}}"
+							],
+							"path": [
+								"wallet",
+								"list-wallet"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "perPage",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Wallet",
+					"id": "bce91f7a-04c5-4a50-b9cb-d93020f7160a",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{token}}"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Cash\",\n    \"walletType\": \"6499bdf7bdeb19285d6d92ac\",\n    \"amount\": 100\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{baseURL}}{{apiVersion}}/wallet/add-wallet"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Wallet",
+					"id": "2d5c05f3-040e-45e6-b849-a86063a2166f",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{token}}"
+							}
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Bank\",\n    \"walletType\": \"6427cd106a6cd06abe76441c\",\n    \"amount\": 1005\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{baseURL}}{{apiVersion}}/wallet/update-wallet/6427e6dbca2c83ac09fa97ce"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Wallet",
+					"id": "e9ef9a29-bd8b-44b8-af34-98aa966c6d80",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{token}}"
+							}
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": "{{baseURL}}{{apiVersion}}/wallet/delete-wallet/6427e365efe6cfa59f4ae9d7"
+					},
+					"response": []
+				}
+			],
+			"id": "f2485bf8-632b-4f4d-93a9-83043d30f51c"
+		},
+		{
+			"name": "Transaction",
+			"item": [
+				{
+					"name": "List Transactions",
+					"id": "c28564af-3f5a-4800-ac5c-61676a4b5589",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{token}}"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseURL}}{{apiVersion}}/transaction/list?type=INCOME&sortTransactionBy=OLDEST&page=2&perPage=3",
+							"host": [
+								"{{baseURL}}{{apiVersion}}"
+							],
+							"path": [
+								"transaction",
+								"list"
+							],
+							"query": [
+								{
+									"key": "type",
+									"value": "INCOME"
+								},
+								{
+									"key": "sortTransactionBy",
+									"value": "OLDEST"
+								},
+								{
+									"key": "page",
+									"value": "2"
+								},
+								{
+									"key": "perPage",
+									"value": "3"
+								},
+								{
+									"key": "category",
+									"value": "64a96b6162c5c32e9b62fe09",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Transaction",
+					"id": "efd7e7a1-17d0-41b0-a87b-bfae66aea81d",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{token}}"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"type\": \"INCOME\",\n    \"amount\": 5500,\n    \"category\": \"64a96b6162c5c32e9b62fe09\",\n    \"description\": \"This is test gaming transaction\",\n    \"wallet\": \"64a96b3562c5c32e9b62fe06\",\n    \"attachments\": [\"jeshf8s9d\"]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{baseURL}}{{apiVersion}}/transaction/create-transaction"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Transaction",
+					"id": "35225f7e-b5d2-48c7-975c-934546bbd6af",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{token}}"
+							}
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"description\": \"This is a test transaction\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{baseURL}}{{apiVersion}}/transaction/update-transaction/642c497c4704e0fd12a44a0a"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Transaction",
+					"id": "fbbca6a8-d68f-4ede-aef4-4ad40461a5d2",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{token}}"
+							}
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"type\": \"INCOME\",\n    \"amount\": 25,\n    \"category\": \"6428759199d36f524a712ddb\",\n    \"description\": \"This is test transaction\",\n    \"wallet\": \"6427e6dbca2c83ac09fa97ce\",\n    \"owner\": \"63b71bfcf51e5fb228d5f713\",\n    \"attachments\": []\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{baseURL}}{{apiVersion}}/transaction/delete-transaction/642c5528095ce86508588a97"
+					},
+					"response": []
+				},
+				{
+					"name": "List Transactions By Type",
+					"id": "1a9e4f04-9835-4052-aea3-bb8459a940b9",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{token}}"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}{{apiVersion}}/transaction/list/income?page=1&perPage=10",
+							"host": [
+								"{{baseURL}}{{apiVersion}}"
+							],
+							"path": [
+								"transaction",
+								"list",
+								"income"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "perPage",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"id": "971aa7ae-85ba-4aa6-a4c9-13bee34f518e"
+		},
+		{
+			"name": "Transaction  Category",
+			"item": [
+				{
+					"name": "List Category",
+					"id": "e0671943-9eff-4e11-aecf-f2f692c46445",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}{{apiVersion}}/category/list?page=1&perPage=10",
+							"host": [
+								"{{baseURL}}{{apiVersion}}"
+							],
+							"path": [
+								"category",
+								"list"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "perPage",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Category  [Admin]",
+					"id": "2e563166-76e7-4aae-b504-b013a9d43591",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Subscription\",\n    \"icon\": \"64aebc7958a0c3591ff7329d\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{baseURL}}{{apiVersion}}/category/create"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Category  [Admin]",
+					"id": "26a7bf7e-2053-4c28-b25d-7dd8f95acb5a",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Shopping\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{baseURL}}{{apiVersion}}/category/update/6428760699d36f524a712de5"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Category [Admin]",
+					"id": "34c992b0-6eb5-462d-bfd6-7e8b9fc187fb",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Shopping\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{baseURL}}{{apiVersion}}/category/delete/642878fa51e2b9707e5434d4"
+					},
+					"response": []
+				},
+				{
+					"name": "Upload Image",
+					"id": "9dbff1f6-141b-488d-b971-c1218b9f22b6",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/home/zumar/Pictures/Screenshots/yellen/Screenshot from 2023-07-03 12-35-52.png"
+								}
+							]
+						},
+						"url": "{{baseURL}}{{apiVersion}}/category/upload-image"
+					},
+					"response": []
+				}
+			],
+			"id": "fdc76b74-fba4-4226-9cf4-7187e74d048f"
+		},
+		{
+			"name": "File Storage",
+			"item": [
+				{
+					"name": "Upload File To Cloudinary",
+					"id": "cf703e00-6e71-481d-b510-5d86398a9e9c",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/home/zumar/Pictures/Screenshots/nawazSharif/Screenshot from 2023-07-03 12-45-34.png"
+								}
+							]
+						},
+						"url": "{{baseURL}}{{apiVersion}}/file/upload-file"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete File From Cloudinary",
+					"id": "6a355845-7727-432c-8fe9-271efeb3e5eb",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "{{baseURL}}{{apiVersion}}/file/delete-file/paugoo6w0g4ah4twv05s"
+					},
+					"response": []
+				}
+			],
+			"id": "ea2fe2b4-a375-45f0-8eab-e1c9f02505a3"
+		}
+	]
+}
