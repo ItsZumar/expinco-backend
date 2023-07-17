@@ -59,7 +59,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"startingDate\": \"2023-06-01T13:01:55.252Z\",\n    \"endingDate\": \"2023-07-07T13:01:55.252Z\"\n}",
+							"raw": "{\n    \"startingDate\": \"2023-07-08T13:01:55.252Z\",\n    \"endingDate\": \"2023-07-10T13:01:55.252Z\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -67,7 +67,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseURL}}{{apiVersion}}/analytics/financial-report?type=EXPENSE&page=1&perPage=10",
+							"raw": "{{baseURL}}{{apiVersion}}/analytics/financial-report?type=INCOME&page=1&perPage=10",
 							"host": [
 								"{{baseURL}}{{apiVersion}}"
 							],
@@ -78,7 +78,7 @@
 							"query": [
 								{
 									"key": "type",
-									"value": "EXPENSE"
+									"value": "INCOME"
 								},
 								{
 									"key": "page",
@@ -169,7 +169,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"firstname\": \"aisha\",\n    \"lastname\": \"aisha\",\n    \"email\": \"aisha@gmail.com.com\",\n    \"password\": \"sara@123\"\n}\n",
+									"raw": "{\n    \"firstname\": \"hania\",\n    \"lastname\": \"khan\",\n    \"email\": \"hania@gmail.com\",\n    \"password\": \"hania@123\"\n}\n",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -229,7 +229,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"email\": \"zumar@yopmail.com\",\n    \"password\": \"zumar@123\"\n}",
+									"raw": "{\n    \"email\": \"hania@gmail.com\",\n    \"password\": \"hania@123\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -626,7 +626,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "{{baseURL}}{{apiVersion}}/transaction/list?type=INCOME&sortTransactionBy=NEWEST&page=1&perPage=10&category=6499bcc2bdeb19285d6d92a7",
+							"raw": "{{baseURL}}{{apiVersion}}/transaction/list?type=INCOME&sortTransactionBy=OLDEST&page=2&perPage=3",
 							"host": [
 								"{{baseURL}}{{apiVersion}}"
 							],
@@ -641,19 +641,20 @@
 								},
 								{
 									"key": "sortTransactionBy",
-									"value": "NEWEST"
+									"value": "OLDEST"
 								},
 								{
 									"key": "page",
-									"value": "1"
+									"value": "2"
 								},
 								{
 									"key": "perPage",
-									"value": "10"
+									"value": "3"
 								},
 								{
 									"key": "category",
-									"value": "6499bcc2bdeb19285d6d92a7"
+									"value": "64a96b6162c5c32e9b62fe09",
+									"disabled": true
 								}
 							]
 						}
@@ -677,7 +678,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"type\": \"EXPENSE\",\n    \"amount\": 50,\n    \"category\": \"6499bcc2bdeb19285d6d92a7\",\n    \"description\": \"This is test gaming transaction\",\n    \"wallet\": \"6499be1bbdeb19285d6d92b0\",\n    \"attachments\": [\"6499bcb0bdeb19285d6d92a1\"]\n}",
+							"raw": "{\n    \"type\": \"INCOME\",\n    \"amount\": 5500,\n    \"category\": \"64a96b6162c5c32e9b62fe09\",\n    \"description\": \"This is test gaming transaction\",\n    \"wallet\": \"64a96b3562c5c32e9b62fe06\",\n    \"attachments\": [\"jeshf8s9d\"]\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -760,14 +761,14 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseURL}}{{apiVersion}}/transaction/list/EXPENSE?page=1&perPage=10",
+							"raw": "{{baseURL}}{{apiVersion}}/transaction/list/income?page=1&perPage=10",
 							"host": [
 								"{{baseURL}}{{apiVersion}}"
 							],
 							"path": [
 								"transaction",
 								"list",
-								"EXPENSE"
+								"income"
 							],
 							"query": [
 								{
@@ -841,7 +842,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"Gaming\"\n}",
+							"raw": "{\n    \"name\": \"Subscription\",\n    \"icon\": \"64aebc7958a0c3591ff7329d\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -895,9 +896,74 @@
 						"url": "{{baseURL}}{{apiVersion}}/category/delete/642878fa51e2b9707e5434d4"
 					},
 					"response": []
+				},
+				{
+					"name": "Upload Image",
+					"id": "9dbff1f6-141b-488d-b971-c1218b9f22b6",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/home/zumar/Pictures/Screenshots/yellen/Screenshot from 2023-07-03 12-35-52.png"
+								}
+							]
+						},
+						"url": "{{baseURL}}{{apiVersion}}/category/upload-image"
+					},
+					"response": []
 				}
 			],
 			"id": "fdc76b74-fba4-4226-9cf4-7187e74d048f"
+		},
+		{
+			"name": "File Storage",
+			"item": [
+				{
+					"name": "Upload File To Cloudinary",
+					"id": "cf703e00-6e71-481d-b510-5d86398a9e9c",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/home/zumar/Pictures/Screenshots/nawazSharif/Screenshot from 2023-07-03 12-45-34.png"
+								}
+							]
+						},
+						"url": "{{baseURL}}{{apiVersion}}/file/upload-file"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete File From Cloudinary",
+					"id": "6a355845-7727-432c-8fe9-271efeb3e5eb",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "{{baseURL}}{{apiVersion}}/file/delete-file/paugoo6w0g4ah4twv05s"
+					},
+					"response": []
+				}
+			],
+			"id": "ea2fe2b4-a375-45f0-8eab-e1c9f02505a3"
 		}
 	]
 }
