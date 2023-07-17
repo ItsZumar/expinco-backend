@@ -1,7 +1,12 @@
 import { NextFunction, Request, Response } from "express";
 import { check } from "express-validator";
 import { apiOk, apiValidation, catchAsync } from "../../../util/apiHelpers";
-import { listCategoryService, createCategoryService, deleteCategoryService, updateCategoryService } from "../service/transactionCategory.service";
+import {
+  listCategoryService,
+  createCategoryService,
+  deleteCategoryService,
+  updateCategoryService,
+} from "../service/transactionCategory.service";
 
 export const listCategory = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
   apiValidation(req, res);
@@ -30,5 +35,3 @@ export const deleteCategory = catchAsync(async (req: Request, res: Response, nex
   const result = await deleteCategoryService(req, res, next);
   apiOk(res, result);
 });
-
-

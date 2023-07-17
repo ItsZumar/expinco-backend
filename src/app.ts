@@ -22,14 +22,16 @@ app.use(compression());
 app.use(morgan("dev"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(session({
+app.use(
+  session({
     resave: true,
     saveUninitialized: true,
     secret: SESSION_SECRET,
     store: new MongoStore({
-        mongoUrl: MONGODB_URI,
-    })
-}));
+      mongoUrl: MONGODB_URI,
+    }),
+  })
+);
 
 app.use(lusca.xframe("SAMEORIGIN"));
 app.use(lusca.xssProtection(true));
@@ -41,11 +43,12 @@ app.use("/v1/category", routes.transactionCategory);
 app.use("/v1/transaction", routes.transaction);
 app.use("/v1/homepage", routes.homepage);
 app.use("/v1/analytics", routes.analytics);
+app.use("/v1/file", routes.fileStorage);
 
 app.use("/", (req, res) => {
-    res.json({
-        status: "LIVE FROM EXPINCO SERVER!!"
-    });
+  res.json({
+    status: "LIVE FROM EXPINCO SERVER!!",
+  });
 });
 
 // Handling 404 and  Global errors here

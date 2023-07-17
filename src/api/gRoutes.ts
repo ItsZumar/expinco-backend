@@ -4,6 +4,7 @@ import transactionCategory from "./transactionCategory/route/transactionCategory
 import transaction from "./transaction/route/transaction.route";
 import homepage from "./homepage/route/homepage.route";
 import analytics from "./analytics/route/analytics.route";
+import fileStorage from "./fileStorage/route/fileStorage.route";
 
 // Exporting all routes as instances
-export default { user, homepage, wallet, transactionCategory, transaction, analytics };
+export default { user, homepage, wallet, transactionCategory, transaction, analytics, fileStorage };
