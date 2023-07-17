@@ -21,7 +21,7 @@ export const createTransaction = catchAsync(async (req: Request, res: Response, 
   await check("category", "A valid transaction category is required").isString().run(req);
   await check("description", "A valid description is required").isString().optional().run(req);
   await check("wallet", "Please select a wallet").isString().run(req);
-  await check("attachments", "Please add a valid attachments").isArray().default(null).optional().run(req);
+  // await check("attachments", "Please add a valid attachments").isArray().default(null).optional().run(req);
 
   apiValidation(req, res);
   const result = await createTransactionService(req, res, next);

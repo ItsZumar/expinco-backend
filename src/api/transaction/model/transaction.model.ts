@@ -1,6 +1,19 @@
 import mongoose, { Schema, Document, Types } from "mongoose";
 import { TransactionType } from "../../../enums";
 
+export type AttachmentDocument = Document & {
+  type: string;
+  secureURL: string;
+};
+
+const attachmentSchema = new Schema<AttachmentDocument>(
+  {
+    type: String,
+    secureURL: String,
+  },
+  { timestamps: true, versionKey: false }
+);
+
 export type TransactionDocument = Document & {
   type: keyof typeof TransactionType;
   amount: number;
@@ -8,8 +21,8 @@ export type TransactionDocument = Document & {
   description: string;
   wallet: Types.ObjectId;
   owner: Types.ObjectId;
-  attachments: Array<Types.ObjectId>;
-  //changed
+  // attachments: Array<Types.ObjectId>;
+  attachments: [AttachmentDocument];
   createdAt: Date;
 };
 
@@ -21,7 +34,8 @@ const transactionSchema = new Schema<TransactionDocument>(
     description: { type: String, required: true, default: null },
     wallet: { type: Schema.Types.ObjectId, ref: "Wallet", required: true },
     owner: { type: Schema.Types.ObjectId, ref: "User", required: true },
-    attachments: { type: [Types.ObjectId], required: false, default: [] },
+    attachments: [attachmentSchema],
+    // attachments: { type: [Types.ObjectId], required: false, default: [] },
   },
   { timestamps: true, versionKey: false }
 );
