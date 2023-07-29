@@ -542,7 +542,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"Cash\",\n    \"walletType\": \"6499bdf7bdeb19285d6d92ac\",\n    \"amount\": 100\n}",
+							"raw": "{\n    \"name\": \"Subscription\",\n    \"amount\": 5000\n}",
 							"options": {
 								"raw": {
 									"language": "json"
