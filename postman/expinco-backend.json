@@ -570,7 +570,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"Bank\",\n    \"walletType\": \"6427cd106a6cd06abe76441c\",\n    \"amount\": 1005\n}",
+							"raw": "{\n    \"name\": \"Bank\",\n    \"amount\": 10000\n}",
 							"options": {
 								"raw": {
 									"language": "json"
