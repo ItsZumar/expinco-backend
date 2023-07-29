@@ -577,7 +577,7 @@
 								}
 							}
 						},
-						"url": "{{baseURL}}{{apiVersion}}/wallet/update-wallet/6427e6dbca2c83ac09fa97ce"
+						"url": "{{baseURL}}{{apiVersion}}/wallet/update-wallet/64c4cab8ef2cae356b20840c"
 					},
 					"response": []
 				},
