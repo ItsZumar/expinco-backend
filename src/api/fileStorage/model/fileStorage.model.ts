@@ -1,13 +1,13 @@
 import mongoose, { Schema, Document, Types } from "mongoose";
 
 export type FileStorageDocument = Document & {
-  type: string;
+  format: string;
   secureURL: string;
 };
 
 const fileStorageSchema = new Schema<FileStorageDocument>(
   {
-    type: { type: String, required: true },
+    format: { type: String, required: true },
     secureURL: String,
   },
   { timestamps: true, versionKey: false }

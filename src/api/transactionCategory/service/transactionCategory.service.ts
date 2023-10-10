@@ -4,29 +4,28 @@ import { AppError } from "../../../errors/error.base";
 import { HttpStatusCode } from "../../../errors/types/HttpStatusCode";
 import { TransactionCategory } from "../model/transactionCategory.model";
 import { ListCategoryI, CreateCategoryI, DeleteCategoryI, UpdateCategoryI } from "./response/transactionCategory.response";
+import { FileStorage } from "../../../api/fileStorage/model/fileStorage.model";
+import { getPagination } from "../../../util/common";
 
 export const listCategoryService = async (req: Request, res: Response, next: NextFunction): Promise<ListCategoryI> => {
   const page = parseInt(req.query.page as string) || 1;
-  const limit = parseInt(req.query.perPage as string) || 10;
+  const perPage = parseInt(req.query.perPage as string) || 10;
 
-  if (page <= 0 || limit <= 0) {
+  if (page <= 0 || perPage <= 0) {
     throw new AppError(HttpStatusCode.BadRequest, "Pagination parameters must be greater than 0!");
   }
 
-  const startIndex = (page - 1) * limit;
-  const endIndex = page * limit;
-  const hasPrevious = startIndex > 0 ? true : false;
-  const hasNext = endIndex < (await TransactionCategory.find().countDocuments().exec()) ? true : false;
+  const totalItems = await TransactionCategory.find().countDocuments().exec();
+  const pagination = getPagination(page, perPage, totalItems);
 
-  const categoriesInDB = await TransactionCategory.find().limit(limit).skip(startIndex);
+  const categoriesInDB = await TransactionCategory.find().limit(perPage).skip(pagination.startIndex);
 
   const result = {
     data: categoriesInDB,
     pagination: {
-      page: page,
-      perPage: limit,
-      hasPrevious: hasPrevious,
-      hasNext: hasNext,
+      page,
+      perPage,
+      ...pagination,
     },
   };
 
@@ -34,13 +33,24 @@ export const listCategoryService = async (req: Request, res: Response, next: Nex
 };
 
 export const createCategoryService = async (req: Request, res: Response, next: NextFunction): Promise<CreateCategoryI> => {
-  const categoryInDB = await TransactionCategory.findOne({ name: req.body.name });
+  const { name, icon } = req.body;
+  let categoryIcon = {};
+
+  const categoryInDB = await TransactionCategory.findOne({ name });
+
+  if (icon) {
+    if (!isValidObjectId(icon)) {
+      throw new AppError(HttpStatusCode.BadRequest, "Attachment id is not valid");
+    }
+    categoryIcon = await FileStorage.findById({ _id: icon });
+  }
 
   if (categoryInDB) {
     throw new AppError(HttpStatusCode.Conflict, "A category with this name already exists!");
   } else {
     const newTransCategory = new TransactionCategory({
       name: req.body.name,
+      icon: categoryIcon,
     });
 
     await newTransCategory.save();

@@ -11,7 +11,7 @@ export const listWallet = catchAsync(async (req: Request, res: Response, next: N
 
 export const addWallet = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
   await check("name", "Name of wallet is required.").isString().run(req);
-  await check("walletType", "Wallet type is required").isString().run(req);
+  // await check("walletType", "Wallet type is required").isString().run(req);
   await check("amount", "Amount is required.").isNumeric().run(req);
 
   apiValidation(req, res);
@@ -21,7 +21,7 @@ export const addWallet = catchAsync(async (req: Request, res: Response, next: Ne
 
 export const updateWallet = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
   await check("name", "Name of wallet is required.").isString().optional().run(req);
-  await check("walletType", "Wallet type is required").isString().optional().run(req);
+  // await check("walletType", "Wallet type is required").isString().optional().run(req);
   await check("amount", "Amount is required.").isNumeric().optional().run(req);
 
   apiValidation(req, res);

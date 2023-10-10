@@ -38,67 +38,59 @@ export const listWalletService = async (req: Request, res: Response, next: NextF
 export const addWalletService = async (req: Request, res: Response, next: NextFunction): Promise<AddWalletI> => {
   const walletInDB = await Wallet.findOne({ name: req.body.name });
 
-  if (walletInDB) {
+  if (walletInDB.owner === req.user._id && walletInDB) {
     throw new AppError(HttpStatusCode.Conflict, "A wallet with this name already exists!");
-  } else {
-    if (!isValidObjectId(req.body.walletType)) {
-      throw new AppError(HttpStatusCode.Conflict, "Id of Wallet Type is not valid!");
-    }
-
-    const newWallet = new Wallet({
-      name: req.body.name,
-      // walletType: req.body.walletType,
-      amount: req.body.amount,
-      owner: req.user._id,
-    });
-
-    const newlyCreatedwalletType = await newWallet.save();
-    return newlyCreatedwalletType;
   }
+  // else {
+  //   if (!isValidObjectId(req.body.walletType)) {
+  //     throw new AppError(HttpStatusCode.Conflict, "Id of Wallet Type is not valid!");
+  //   }
+  // }
+  const newWallet = new Wallet({
+    name: req.body.name,
+    // walletType: req.body.walletType,
+    amount: req.body.amount,
+    owner: req.user._id,
+  });
+
+  const newlyCreatedwalletType = await newWallet.save();
+  return newlyCreatedwalletType;
 };
 
 export const updateWalletService = async (req: Request, res: Response, next: NextFunction): Promise<UpdateWalletI> => {
-  // Check if the wallet ID is valid
   if (!isValidObjectId(req.params.id)) {
     throw new AppError(HttpStatusCode.NotFound, "Wallet id is not valid!");
   }
 
-  // Find the wallet by ID
   const wallet = await Wallet.findById(req.params.id);
 
   if (!wallet) {
     throw new AppError(HttpStatusCode.NotFound, "A wallet doesn't exist with this id.");
   }
 
-  // Create ObjectIds for the creator and current user
   const creatorId = wallet.owner;
   const userId = req.user._id;
 
-  // Check if the wallet exists and if the current user is the creator
   if (!wallet || creatorId.toString() !== userId.toString()) {
     throw new AppError(HttpStatusCode.NotFound, "A wallet doesn't exist with this id.");
   } else {
-    // Check if the wallet type ID is valid
-    if (!isValidObjectId(req.body.walletType)) {
-      throw new AppError(HttpStatusCode.NotFound, "Wallet type id is not valid!");
-    }
+    // if (!isValidObjectId(req.body.walletType)) {
+    //   throw new AppError(HttpStatusCode.NotFound, "Wallet type id is not valid!");
+    // }
     // const walletType = await WalletType.findById({ _id: req.body.walletType });
     // if (!walletType) {
     //   throw new AppError(HttpStatusCode.NotFound, "Wallet type doesn't exist with this id.");
     // }
 
-    // Update the wallet in the database
     const updatedWallet = await Wallet.findByIdAndUpdate(
       req.params.id,
       {
         name: req.body.name,
-        // walletType: req.body.walletType,
         amount: req.body.amount,
       },
       { new: true }
     );
 
-    // Return the updated wallet
     return updatedWallet;
   }
 };
@@ -108,18 +100,15 @@ export const deleteWalletService = async (req: Request, res: Response, next: Nex
     throw new AppError(HttpStatusCode.NotFound, "Wallet id is not valid!");
   }
 
-  // Find the wallet by ID
   const wallet = await Wallet.findById(req.params.id);
 
   if (!wallet) {
     throw new AppError(HttpStatusCode.NotFound, "A wallet doesn't exist with this id.");
   }
 
-  // Create ObjectIds for the creator and current user
   const creatorId = wallet.owner;
   const userId = req.user._id;
 
-  // Check if the wallet exists and if the current user is the creator
   if (creatorId.toString() !== userId.toString()) {
     throw new AppError(HttpStatusCode.NotFound, "A wallet doesn't exist with this id.");
   }
