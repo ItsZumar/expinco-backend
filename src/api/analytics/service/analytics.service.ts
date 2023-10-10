@@ -4,6 +4,7 @@ import { AppError } from "../../../errors/error.base";
 import { HttpStatusCode } from "../../../errors/types/HttpStatusCode";
 import { TransactionType, TrasactionTimePeriod } from "../../../enums";
 import { SpendFrequencyI } from "./response/analytics.response";
+import { getPagination } from "../../../util/common";
 
 export const spendFrequencyService = async (req: Request, res: Response, next: NextFunction): Promise<SpendFrequencyI> => {
   const { orderBy } = req.query;
@@ -179,18 +180,16 @@ export const financialReportService = async (req: Request, res: Response, next: 
   const { startingDate, endingDate } = req.body;
   const { type } = req.query;
   const transactionsInDB = [];
-  let sum = 0;
+  let totalAmount = 0;
   const page = parseInt(req.query.page as string) || 1;
-  const limit = parseInt(req.query.perPage as string) || 10;
+  const perPage = parseInt(req.query.perPage as string) || 10;
 
-  if (page <= 0 || limit <= 0) {
+  if (page <= 0 || perPage <= 0) {
     throw new AppError(HttpStatusCode.BadRequest, "Pagination parameters must be greater than 0!");
   }
 
-  const startIndex = (page - 1) * limit;
-  const endIndex = page * limit;
-  const hasPrevious = startIndex > 0 ? true : false;
-  const hasNext = endIndex < (await Transaction.find({ owner: req.user._id }).countDocuments().exec()) ? true : false;
+  const totalItems = await Transaction.find({ owner: req.user._id }).countDocuments().exec();
+  const pagination = getPagination(page, perPage, totalItems);
 
   switch (type) {
     case TransactionType.INCOME: {
@@ -203,8 +202,8 @@ export const financialReportService = async (req: Request, res: Response, next: 
         },
       })
         .sort("-createdAt")
-        .limit(limit)
-        .skip(startIndex)
+        .limit(perPage)
+        .skip(pagination.startIndex)
         .populate("category")
         .populate({
           path: "wallet",
@@ -214,7 +213,7 @@ export const financialReportService = async (req: Request, res: Response, next: 
         .select(["-owner"])
         .exec();
       transactionsInDB.push(transactions);
-      sum = transactions.reduce((total, transaction) => total + transaction.amount, 0);
+      totalAmount = transactions.reduce((total, transaction) => total + transaction.amount, 0);
 
       break;
     }
@@ -229,8 +228,8 @@ export const financialReportService = async (req: Request, res: Response, next: 
         },
       })
         .sort("-createdAt")
-        .limit(limit)
-        .skip(startIndex)
+        .limit(perPage)
+        .skip(pagination.startIndex)
         .populate("category")
         .populate({
           path: "wallet",
@@ -241,19 +240,18 @@ export const financialReportService = async (req: Request, res: Response, next: 
         .exec();
 
       transactionsInDB.push(transactions);
-      sum = transactionsInDB[0].reduce((total, transaction) => total + transaction.amount, 0);
+      totalAmount = transactionsInDB[0].reduce((total, transaction) => total + transaction.amount, 0);
       break;
     }
   }
 
   const result = {
     data: transactionsInDB[0],
-    totalAmount: sum,
+    totalAmount: totalAmount,
     pagination: {
-      page: page,
-      perPage: limit,
-      hasPrevious: hasPrevious,
-      hasNext: hasNext,
+      page,
+      perPage,
+      ...pagination,
     },
   };
   return result;

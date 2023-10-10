@@ -5,24 +5,22 @@ import { AppError } from "../../../errors/error.base";
 import { HttpStatusCode } from "../../../errors/types/HttpStatusCode";
 import { CreateTransactionI, DeleteTransactionI, ListTransactionI, UpdateTransactionI } from "./response/transaction.response";
 import { Wallet } from "../../wallet/model/wallet.model";
-import { toUpper } from "lodash";
 import { TransactionCategories, TransactionSortType, TransactionType } from "../../../enums";
 import { FileStorage } from "../../fileStorage/model/fileStorage.model";
+import { getPagination } from "../../../util/common";
 
 export const listTransactionService = async (req: Request, res: Response, next: NextFunction): Promise<ListTransactionI> => {
   const page: number = parseInt(req.query.page as string) || 1;
-  const limit: number = parseInt(req.query.perPage as string) || 10;
+  const perPage: number = parseInt(req.query.perPage as string) || 10;
   const transactionsInDB = [];
   const { type, sortTransactionBy, category } = req.query;
 
-  if (page <= 0 || limit <= 0) {
+  if (page <= 0 || perPage <= 0) {
     throw new AppError(HttpStatusCode.BadRequest, "Pagination parameters must be greater than 0!");
   }
 
-  const startIndex = (page - 1) * limit;
-  const endIndex = page * limit;
-  const hasPrevious = startIndex > 0 ? true : false;
-  const hasNext = endIndex < (await Transaction.find({ owner: req.user._id }).countDocuments().exec()) ? true : false;
+  const totalItems = await Transaction.find({ owner: req.user._id }).countDocuments().exec();
+  const pagination = getPagination(page, perPage, totalItems);
 
   let transactionsQuery: { owner: string; type?: string } = { owner: req.user._id };
 
@@ -42,8 +40,8 @@ export const listTransactionService = async (req: Request, res: Response, next: 
 
   const transactions = await Transaction.find(transactionsQuery)
     .sort("-createdAt")
-    .limit(limit)
-    .skip(startIndex)
+    .limit(perPage)
+    .skip(pagination.startIndex)
     .populate("category")
     .populate({
       path: "wallet",
@@ -118,10 +116,9 @@ export const listTransactionService = async (req: Request, res: Response, next: 
   const result = {
     data: transactionsInDB[0],
     pagination: {
-      page: page,
-      perPage: limit,
-      hasPrevious: hasPrevious,
-      hasNext: hasNext,
+      page,
+      perPage,
+      ...pagination,
     },
   };
 
@@ -131,7 +128,7 @@ export const listTransactionService = async (req: Request, res: Response, next: 
 export const createTransactionService = async (req: Request, res: Response, next: NextFunction): Promise<CreateTransactionI> => {
   const { type, amount, category, description, wallet, attachments }: Partial<CreateTransactionI> = req.body;
 
-  const arr = [];
+  const attachmentIds = [];
 
   if (!isValidObjectId(category)) {
     throw new AppError(HttpStatusCode.NotFound, "Cateogry id is not valid");
@@ -145,7 +142,7 @@ export const createTransactionService = async (req: Request, res: Response, next
         throw new AppError(HttpStatusCode.BadRequest, "Attachment id is not valid");
       }
       const attachment = await FileStorage.findById({ _id: attachId });
-      arr.push(attachment);
+      attachmentIds.push(attachment);
     }
   }
 
@@ -172,7 +169,7 @@ export const createTransactionService = async (req: Request, res: Response, next
     }
   }
 
-  console.log(arr);
+  console.log(attachmentIds);
 
   const newTransaction = new Transaction({
     type: type,
@@ -181,8 +178,7 @@ export const createTransactionService = async (req: Request, res: Response, next
     description: description,
     wallet: wallet,
     owner: req.user._id,
-    attachments: arr,
-    // attachments: [attachment],
+    attachments: attachmentIds,
   });
 
   await newTransaction.save();
@@ -262,28 +258,23 @@ export const deleteTransactionService = async (req: Request, res: Response, next
 
 export const getTransactionsByTypeService = async (req: Request, res: Response, next: NextFunction): Promise<ListTransactionI> => {
   const page = parseInt(req.query.page as string) || 1;
-  const limit = parseInt(req.query.perPage as string) || 10;
+  const perPage = parseInt(req.query.perPage as string) || 10;
 
-  if (page <= 0 || limit <= 0) {
+  if (page <= 0 || perPage <= 0) {
     throw new AppError(HttpStatusCode.BadRequest, "Pagination parameters must be greater than 0!");
   }
 
-  const startIndex = (page - 1) * limit;
-  const endIndex = page * limit;
-  const hasPrevious = startIndex > 0 ? true : false;
-  const hasNext = endIndex < (await Transaction.find({ owner: req.user._id }).countDocuments().exec()) ? true : false;
+  const totalItems = await Transaction.find({ owner: req.user._id }).countDocuments().exec();
+  const pagination = getPagination(page, perPage, totalItems);
 
-  const transactionsInDB = await Transaction.find({ type: toUpper(req.params.type) })
+  const transactionsInDB = await Transaction.find({ type: req.params.type.toUpperCase() })
     .sort("-createdAt")
-    .limit(limit)
-    .skip(startIndex)
+    .limit(perPage)
+    .skip(pagination.startIndex)
     .populate("category")
     .populate({
       path: "wallet",
       select: ["_id", "amount", "name"],
-      // populate: {
-      //   path: "walletType",
-      // },
     })
     .populate("attachments")
     .select(["-owner"])
@@ -292,10 +283,9 @@ export const getTransactionsByTypeService = async (req: Request, res: Response, 
   const result = {
     data: transactionsInDB,
     pagination: {
-      page: page,
-      perPage: limit,
-      hasPrevious: hasPrevious,
-      hasNext: hasNext,
+      page,
+      perPage,
+      ...pagination,
     },
   };
 
