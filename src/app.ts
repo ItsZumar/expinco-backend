@@ -12,9 +12,18 @@ import MongoStore from "connect-mongo";
 import morgan from "morgan";
 import mongoInit from "./config/database";
 import routes from "./api/gRoutes";
+import cors from "cors";
 
 const app = express();
 mongoInit(MONGODB_URI);
+
+const corsOptions = {
+  origin: `http://localhost:5000`,
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
 
 // Express configuration
 app.set("port", process.env.PORT || 3000);

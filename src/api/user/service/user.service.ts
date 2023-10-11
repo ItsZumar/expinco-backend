@@ -73,7 +73,11 @@ export const emailSigninService = async (req: Request, res: Response, next: Next
   }
 };
 
-export const forgotPasswordService = async (req: Request, res: Response, next: NextFunction): Promise<ForgetPasswordI> => {
+export const forgotPasswordService = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<ForgetPasswordI> => {
   const user = await User.findOne({ email: req.body.email });
 
   if (!user) {
@@ -99,7 +103,11 @@ export const forgotPasswordService = async (req: Request, res: Response, next: N
   }
 };
 
-export const changePasswordService = async (req: Request, res: Response, next: NextFunction): Promise<ChangePasswordI> => {
+export const changePasswordService = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<ChangePasswordI> => {
   const user = await User.findOne({ email: req.user.email });
 
   if (!user) {
@@ -141,7 +149,11 @@ export const verifyEmailService = async (req: Request, res: Response, next: Next
   }
 };
 
-export const resendVerifyEmailService = async (req: Request, res: Response, next: NextFunction): Promise<ResendVerifyEmailI> => {
+export const resendVerifyEmailService = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<ResendVerifyEmailI> => {
   const user = await User.findOne({ email: req.body.email });
 
   if (!user) {
@@ -171,7 +183,11 @@ export const resendVerifyEmailService = async (req: Request, res: Response, next
   }
 };
 
-export const resetPasswordService = async (req: Request, res: Response, next: NextFunction): Promise<ResetPasswordI> => {
+export const resetPasswordService = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<ResetPasswordI> => {
   const user = await User.findOne({ email: req.body.email });
 
   if (!user) {
@@ -203,7 +219,9 @@ export const getProfileService = async (req: Request, res: Response, next: NextF
 };
 
 export const updateProfileService = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
-  const user = await User.findOne({ id: req.user.id });
+  const user = await User.findById({ _id: req.user.id });
+
+  console.log("user === ", user);
 
   if (!user) {
     throw new AppError(HttpStatusCode.BadRequest, "User doesn't exists with this email");
