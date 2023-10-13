@@ -36,16 +36,19 @@ export const listWalletService = async (req: Request, res: Response, next: NextF
 };
 
 export const addWalletService = async (req: Request, res: Response, next: NextFunction): Promise<AddWalletI> => {
-  const walletInDB = await Wallet.findOne({ name: req.body.name });
+  const walletInDB = await Wallet.findOne({
+    $and: [{ name: req.body.name }, { owner: req.user.id }],
+  });
 
-  if (walletInDB.owner === req.user._id && walletInDB) {
-    throw new AppError(HttpStatusCode.Conflict, "A wallet with this name already exists!");
+  if (walletInDB) {
+    throw new AppError(HttpStatusCode.Conflict, "Your wallet with this name already exists!");
   }
   // else {
   //   if (!isValidObjectId(req.body.walletType)) {
   //     throw new AppError(HttpStatusCode.Conflict, "Id of Wallet Type is not valid!");
   //   }
   // }
+
   const newWallet = new Wallet({
     name: req.body.name,
     // walletType: req.body.walletType,

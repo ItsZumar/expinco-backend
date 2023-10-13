@@ -3,13 +3,22 @@ import { NextFunction, Request, Response } from "express";
 import { Transaction } from "../model/transaction.model";
 import { AppError } from "../../../errors/error.base";
 import { HttpStatusCode } from "../../../errors/types/HttpStatusCode";
-import { CreateTransactionI, DeleteTransactionI, ListTransactionI, UpdateTransactionI } from "./response/transaction.response";
+import {
+  CreateTransactionI,
+  DeleteTransactionI,
+  ListTransactionI,
+  UpdateTransactionI,
+} from "./response/transaction.response";
 import { Wallet } from "../../wallet/model/wallet.model";
 import { TransactionCategories, TransactionSortType, TransactionType } from "../../../enums";
 import { FileStorage } from "../../fileStorage/model/fileStorage.model";
 import { getPagination } from "../../../util/common";
 
-export const listTransactionService = async (req: Request, res: Response, next: NextFunction): Promise<ListTransactionI> => {
+export const listTransactionService = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<ListTransactionI> => {
   const page: number = parseInt(req.query.page as string) || 1;
   const perPage: number = parseInt(req.query.perPage as string) || 10;
   const transactionsInDB = [];
@@ -125,7 +134,11 @@ export const listTransactionService = async (req: Request, res: Response, next: 
   return result;
 };
 
-export const createTransactionService = async (req: Request, res: Response, next: NextFunction): Promise<CreateTransactionI> => {
+export const createTransactionService = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<CreateTransactionI> => {
   const { type, amount, category, description, wallet, attachments }: Partial<CreateTransactionI> = req.body;
 
   const attachmentIds = [];
@@ -146,12 +159,20 @@ export const createTransactionService = async (req: Request, res: Response, next
     }
   }
 
-  const walletById = await Wallet.findById({ _id: wallet });
+  // const walletById = await Wallet.findById({ _id: wallet });
+
+  const walletById = await Wallet.findOne({
+    $and: [{ _id: wallet }, { owner: req.user.id }],
+  });
+
+  if (!walletById) {
+    throw new AppError(HttpStatusCode.Conflict, "Create wallet First!");
+  }
 
   switch (type) {
     case TransactionType.EXPENSE: {
       if (walletById.amount > amount) {
-        walletById.amount = walletById.amount - amount;
+        walletById.amount = Number(walletById.amount) - Number(amount);
         walletById.save();
       } else {
         throw new AppError(HttpStatusCode.BadRequest, "You don't have sufficient amount");
@@ -162,7 +183,7 @@ export const createTransactionService = async (req: Request, res: Response, next
       if (amount < 0) {
         throw new AppError(HttpStatusCode.BadRequest, "The amount cannot be in negative!");
       } else {
-        walletById.amount = walletById.amount + amount;
+        walletById.amount = Number(walletById.amount) + Number(amount);
         walletById.save();
       }
       break;
@@ -185,7 +206,11 @@ export const createTransactionService = async (req: Request, res: Response, next
   return newTransaction;
 };
 
-export const updateTransactionService = async (req: Request, res: Response, next: NextFunction): Promise<UpdateTransactionI> => {
+export const updateTransactionService = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<UpdateTransactionI> => {
   const { type, amount, category, description, wallet, attachments } = req.body;
 
   // Check if the wallet ID is valid
@@ -224,7 +249,11 @@ export const updateTransactionService = async (req: Request, res: Response, next
   }
 };
 
-export const deleteTransactionService = async (req: Request, res: Response, next: NextFunction): Promise<DeleteTransactionI> => {
+export const deleteTransactionService = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<DeleteTransactionI> => {
   if (!isValidObjectId(req.params.id)) {
     throw new AppError(HttpStatusCode.NotFound, "Transaction id is not valid");
   }
@@ -256,7 +285,11 @@ export const deleteTransactionService = async (req: Request, res: Response, next
   }
 };
 
-export const getTransactionsByTypeService = async (req: Request, res: Response, next: NextFunction): Promise<ListTransactionI> => {
+export const getTransactionsByTypeService = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<ListTransactionI> => {
   const page = parseInt(req.query.page as string) || 1;
   const perPage = parseInt(req.query.perPage as string) || 10;
 
